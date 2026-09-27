@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>我的股票估值器</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang TC",
+               "Segoe UI", sans-serif;
+  background: #f4f6f8;
+  color: #1f2937;
+}
+
+.app {
+  max-width: 520px;
+  margin: auto;
+  min-height: 100vh;
+  background: white;
+  padding: 28px 22px;
+}
+
+.title {
+  text-align: center;
+  font-size: 30px;
+  font-weight: 800;
+  margin: 15px 0 5px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #6b7280;
+  margin-bottom: 35px;
+}
+
+label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+input {
+  width: 100%;
+  height: 55px;
+  padding: 0 16px;
+  font-size: 20px;
+  border: 1px solid #d1d5db;
+  border-radius: 14px;
+}
+
+button {
+  width: 100%;
+  height: 55px;
+  margin-top: 15px;
+  border: 0;
+  border-radius: 14px;
+  background: #111827;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.status {
+  margin-top: 25px;
+  text-align: center;
+  color: #6b7280;
+}
+
+.result {
+  display: none;
+  margin-top: 25px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 22px;
+}
+
+.stock-name {
+  font-size: 25px;
+  font-weight: 800;
+}
+
+.date {
+  color: #6b7280;
+  margin-top: 5px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.card-title {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.card-value {
+  font-size: 22px;
+  font-weight: 800;
+  margin-top: 6px;
+}
+
+.notice {
+  margin-top: 22px;
+  padding: 15px;
+  background: #fff7ed;
+  border-radius: 14px;
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.error {
+  color: #b91c1c;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="title">📊 我的股票估值器</div>
+
+  <div class="subtitle">
+    第一步：讀取證交所真實資料
+  </div>
+
+  <label>股票代號</label>
+
+  <input
+    id="stockInput"
+    type="text"
+    inputmode="numeric"
+    placeholder="例如：2330"
+  >
+
+  <button onclick="loadStock()">
+    取得股票資料
+  </button>
+
+  <div id="status" class="status"></div>
+
+  <div id="result" class="result">
+
+    <div id="stockName" class="stock-name"></div>
+    <div id="dataDate" class="date"></div>
+
+    <div class="grid">
+
+      <div class="card">
+        <div class="card-title">本益比 P/E</div>
+        <div id="pe" class="card-value">--</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">股價淨值比 P/B</div>
+        <div id="pb" class="card-value">--</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">殖利率</div>
+        <div id="yield" class="card-value">--</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">市場</div>
+        <div class="card-value">上市</div>
+      </div>
+
+    </div>
+
+    <div class="notice">
+      📌 這一版已經不是示範數字。
+      顯示的是證交所 OpenAPI 回傳的資料。
+      下一步才會加入股價、EPS、歷史估值與
+      「便宜／合理／溢價」模型。
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+const API =
+  "https://openapi.twse.com.tw/v1/exchangeReport/BWIBBU_ALL";
+
+
+async function loadStock() {
+
+  const code =
+    document.getElementById("stockInput").value.trim();
+
+  const status =
+    document.getElementById("status");
+
+  const result =
+    document.getElementById("result");
+
+
+  if (!code) {
+    alert("請輸入股票代號 😊");
+    return;
+  }
+
+
+  status.className = "status";
+  status.innerText = "正在向證交所取得資料…";
+  result.style.display = "none";
+
+
+  try {
+
+    const response = await fetch(API);
+
+    if (!response.ok) {
+      throw new Error("API 回應失敗");
+    }
+
+    const data = await response.json();
+
+    const stock =
+      data.find(item => item.Code === code);
+
+
+    if (!stock) {
+
+      status.className = "status error";
+
+      status.innerText =
+        "找不到這個上市股票代號。\n目前這一版先測試上市股票。";
+
+      return;
+    }
+
+
+    document.getElementById("stockName").innerText =
+      stock.Name + " " + stock.Code;
+
+
+    document.getElementById("pe").innerText =
+      stock.PEratio
+        ? stock.PEratio + " 倍"
+        : "無資料";
+
+
+    document.getElementById("pb").innerText =
+      stock.PBratio
+        ? stock.PBratio + " 倍"
+        : "無資料";
+
+
+    document.getElementById("yield").innerText =
+      stock.DividendYield
+        ? stock.DividendYield + "%"
+        : "無資料";
+
+
+    document.getElementById("dataDate").innerText =
+      "證交所資料日期：" +
+      formatROCDate(stock.Date);
+
+
+    status.innerText = "";
+
+    result.style.display = "block";
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+    status.className = "status error";
+
+    status.innerText =
+      "目前無法直接讀取證交所資料。\n" +
+      "如果看到這段文字，把畫面截圖給我。";
+
+  }
+
+}
+
+
+function formatROCDate(dateString) {
+
+  if (!dateString || dateString.length !== 7) {
+    return dateString || "未知";
+  }
+
+  const rocYear =
+    parseInt(dateString.substring(0, 3));
+
+  const year = rocYear + 1911;
+
+  const month =
+    dateString.substring(3, 5);
+
+  const day =
+    dateString.substring(5, 7);
+
+  return `${year}/${month}/${day}`;
+}
+
+
+document
+  .getElementById("stockInput")
+  .addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+      loadStock();
+    }
+
+  });
+
+</script>
+
+</body>
+</html>
