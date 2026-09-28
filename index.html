@@ -1,335 +1,796 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>我的股票估值器</title>
+  <title>StockEye 股票估值器</title>
 
-<style>
-* { box-sizing: border-box; }
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang TC",
-               "Segoe UI", sans-serif;
-  background: #f4f6f8;
-  color: #1f2937;
-}
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang TC",
+        "Segoe UI", sans-serif;
+      background: #f4f6f8;
+      color: #1f2937;
+    }
 
-.app {
-  max-width: 520px;
-  margin: auto;
-  min-height: 100vh;
-  background: white;
-  padding: 28px 22px;
-}
+    .app {
+      max-width: 520px;
+      margin: auto;
+      min-height: 100vh;
+      background: white;
+      padding: 28px 22px 50px;
+    }
 
-.title {
-  text-align: center;
-  font-size: 30px;
-  font-weight: 800;
-  margin: 15px 0 5px;
-}
+    .logo {
+      text-align: center;
+      font-size: 42px;
+      margin-top: 10px;
+    }
 
-.subtitle {
-  text-align: center;
-  color: #6b7280;
-  margin-bottom: 35px;
-}
+    .title {
+      text-align: center;
+      font-size: 30px;
+      font-weight: 800;
+      margin: 8px 0 5px;
+    }
 
-label {
-  display: block;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
+    .subtitle {
+      text-align: center;
+      color: #6b7280;
+      margin-bottom: 35px;
+      line-height: 1.6;
+    }
 
-input {
-  width: 100%;
-  height: 55px;
-  padding: 0 16px;
-  font-size: 20px;
-  border: 1px solid #d1d5db;
-  border-radius: 14px;
-}
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
 
-button {
-  width: 100%;
-  height: 55px;
-  margin-top: 15px;
-  border: 0;
-  border-radius: 14px;
-  background: #111827;
-  color: white;
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
-}
+    input {
+      width: 100%;
+      height: 55px;
+      padding: 0 16px;
+      font-size: 20px;
+      border: 1px solid #d1d5db;
+      border-radius: 14px;
+      outline: none;
+    }
 
-.status {
-  margin-top: 25px;
-  text-align: center;
-  color: #6b7280;
-}
+    input:focus {
+      border-color: #111827;
+    }
 
-.result {
-  display: none;
-  margin-top: 25px;
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
-  border-radius: 20px;
-  padding: 22px;
-}
+    button {
+      width: 100%;
+      height: 55px;
+      margin-top: 15px;
+      border: 0;
+      border-radius: 14px;
+      background: #111827;
+      color: white;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+    }
 
-.stock-name {
-  font-size: 25px;
-  font-weight: 800;
-}
+    button:active {
+      transform: scale(0.99);
+    }
 
-.date {
-  color: #6b7280;
-  margin-top: 5px;
-}
+    .quick {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 22px;
-}
+    .quick button {
+      height: 38px;
+      margin-top: 0;
+      background: #f3f4f6;
+      color: #374151;
+      font-size: 14px;
+      font-weight: 600;
+    }
 
-.card {
-  background: white;
-  border-radius: 14px;
-  padding: 16px;
-}
+    .status {
+      margin-top: 25px;
+      text-align: center;
+      color: #6b7280;
+      white-space: pre-line;
+      line-height: 1.6;
+    }
 
-.card-title {
-  color: #6b7280;
-  font-size: 14px;
-}
+    .loading {
+      color: #374151;
+    }
 
-.card-value {
-  font-size: 22px;
-  font-weight: 800;
-  margin-top: 6px;
-}
+    .error {
+      color: #b91c1c;
+    }
 
-.notice {
-  margin-top: 22px;
-  padding: 15px;
-  background: #fff7ed;
-  border-radius: 14px;
-  line-height: 1.7;
-  font-size: 14px;
-}
+    .result {
+      display: none;
+      margin-top: 25px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 20px;
+      padding: 22px;
+    }
 
-.error {
-  color: #b91c1c;
-}
-</style>
+    .stock-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .stock-name {
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .stock-code {
+      margin-top: 4px;
+      color: #6b7280;
+      font-size: 16px;
+    }
+
+    .market-tag {
+      background: #e8f5ee;
+      color: #18794e;
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .date {
+      color: #6b7280;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 16px;
+      border: 1px solid #eef0f2;
+    }
+
+    .card-title {
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .card-value {
+      font-size: 22px;
+      font-weight: 800;
+      margin-top: 6px;
+    }
+
+    .wide {
+      grid-column: 1 / -1;
+    }
+
+    .source {
+      margin-top: 20px;
+      font-size: 13px;
+      color: #6b7280;
+      text-align: right;
+    }
+
+    .notice {
+      margin-top: 22px;
+      padding: 16px;
+      background: #fff7ed;
+      border-radius: 14px;
+      line-height: 1.7;
+      font-size: 14px;
+      color: #7c4a03;
+    }
+
+    .next {
+      margin-top: 15px;
+      padding: 16px;
+      background: #eff6ff;
+      border-radius: 14px;
+      line-height: 1.7;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .footer {
+      text-align: center;
+      color: #9ca3af;
+      font-size: 12px;
+      margin-top: 30px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 380px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .wide {
+        grid-column: auto;
+      }
+    }
+  </style>
 </head>
+
 
 <body>
 
-<div class="app">
+  <div class="app">
 
-  <div class="title">📊 我的股票估值器</div>
+    <div class="logo">📊</div>
 
-  <div class="subtitle">
-    第一步：讀取證交所真實資料
-  </div>
+    <div class="title">
+      StockEye
+    </div>
 
-  <label>股票代號</label>
+    <div class="subtitle">
+      我的股票估值器<br>
+      輸入股票代號，讀取證交所真實資料
+    </div>
 
-  <input
-    id="stockInput"
-    type="text"
-    inputmode="numeric"
-    placeholder="例如：2330"
-  >
 
-  <button onclick="loadStock()">
-    取得股票資料
-  </button>
+    <label for="stockInput">
+      股票代號
+    </label>
 
-  <div id="status" class="status"></div>
+    <input
+      id="stockInput"
+      type="text"
+      inputmode="numeric"
+      maxlength="6"
+      placeholder="例如：2330"
+      autocomplete="off"
+    >
 
-  <div id="result" class="result">
 
-    <div id="stockName" class="stock-name"></div>
-    <div id="dataDate" class="date"></div>
+    <button id="searchButton" onclick="loadStock()">
+      查詢股票
+    </button>
 
-    <div class="grid">
 
-      <div class="card">
-        <div class="card-title">本益比 P/E</div>
-        <div id="pe" class="card-value">--</div>
+    <div class="quick">
+
+      <button onclick="quickSearch('2330')">
+        2330
+      </button>
+
+      <button onclick="quickSearch('2317')">
+        2317
+      </button>
+
+      <button onclick="quickSearch('2303')">
+        2303
+      </button>
+
+    </div>
+
+
+    <div id="status" class="status"></div>
+
+
+    <div id="result" class="result">
+
+      <div class="stock-header">
+
+        <div>
+          <div id="stockName" class="stock-name">
+            --
+          </div>
+
+          <div id="stockCode" class="stock-code">
+            --
+          </div>
+        </div>
+
+        <div class="market-tag">
+          上市
+        </div>
+
       </div>
 
-      <div class="card">
-        <div class="card-title">股價淨值比 P/B</div>
-        <div id="pb" class="card-value">--</div>
+
+      <div id="dataDate" class="date">
+        --
       </div>
 
-      <div class="card">
-        <div class="card-title">殖利率</div>
-        <div id="yield" class="card-value">--</div>
+
+      <div class="grid">
+
+        <div class="card">
+
+          <div class="card-title">
+            本益比 P/E
+          </div>
+
+          <div id="pe" class="card-value">
+            --
+          </div>
+
+        </div>
+
+
+        <div class="card">
+
+          <div class="card-title">
+            股價淨值比 P/B
+          </div>
+
+          <div id="pb" class="card-value">
+            --
+          </div>
+
+        </div>
+
+
+        <div class="card wide">
+
+          <div class="card-title">
+            殖利率
+          </div>
+
+          <div id="yield" class="card-value">
+            --
+          </div>
+
+        </div>
+
       </div>
 
-      <div class="card">
-        <div class="card-title">市場</div>
-        <div class="card-value">上市</div>
+
+      <div class="notice">
+        📌 目前這一版顯示的是證交所真實資料，
+        還沒有加入「便宜／合理／偏貴」判斷。
+        我們會在取得股價、EPS 與歷史估值資料後，
+        再建立正式的估值模型。
+      </div>
+
+
+      <div class="next">
+        🚧 StockEye 下一階段：
+        加入目前股價、EPS、合理本益比區間，
+        最後計算合理價範圍。
+      </div>
+
+
+      <div class="source">
+        資料來源：臺灣證券交易所 TWSE
       </div>
 
     </div>
 
-    <div class="notice">
-      📌 這一版已經不是示範數字。
-      顯示的是證交所 OpenAPI 回傳的資料。
-      下一步才會加入股價、EPS、歷史估值與
-      「便宜／合理／溢價」模型。
+
+    <div class="footer">
+      StockEye 僅提供資料整理與估值參考<br>
+      不構成任何投資建議
     </div>
 
   </div>
 
-</div>
+
+  <script>
+
+    /*
+      ==========================================
+      StockEye API
+      ==========================================
+    */
+
+    const API =
+      "https://stockeye-api.wpeanut001.workers.dev/";
 
 
-<script>
+    /*
+      ==========================================
+      查詢股票
+      ==========================================
+    */
 
-const API =
-  "https://openapi.twse.com.tw/v1/exchangeReport/BWIBBU_ALL";
+    async function loadStock() {
 
+      const input =
+        document.getElementById("stockInput");
 
-async function loadStock() {
-
-  const code =
-    document.getElementById("stockInput").value.trim();
-
-  const status =
-    document.getElementById("status");
-
-  const result =
-    document.getElementById("result");
+      const code =
+        input.value.trim();
 
 
-  if (!code) {
-    alert("請輸入股票代號 😊");
-    return;
-  }
+      const status =
+        document.getElementById("status");
+
+      const result =
+        document.getElementById("result");
+
+      const searchButton =
+        document.getElementById("searchButton");
 
 
-  status.className = "status";
-  status.innerText = "正在向證交所取得資料…";
-  result.style.display = "none";
+      /*
+        檢查有沒有輸入
+      */
+
+      if (!code) {
+
+        alert("請先輸入股票代號 😊");
+
+        input.focus();
+
+        return;
+      }
 
 
-  try {
+      /*
+        基本格式檢查
+      */
 
-    const response = await fetch(API);
+      if (!/^[0-9]{4,6}$/.test(code)) {
 
-    if (!response.ok) {
-      throw new Error("API 回應失敗");
-    }
+        status.className =
+          "status error";
 
-    const data = await response.json();
+        status.innerText =
+          "股票代號格式好像不對喔。\n請輸入例如 2330。";
 
-    const stock =
-      data.find(item => item.Code === code);
+        result.style.display =
+          "none";
+
+        return;
+      }
 
 
-    if (!stock) {
+      /*
+        顯示讀取中
+      */
 
-      status.className = "status error";
+      status.className =
+        "status loading";
 
       status.innerText =
-        "找不到這個上市股票代號。\n目前這一版先測試上市股票。";
+        "正在取得證交所資料…";
 
-      return;
+      result.style.display =
+        "none";
+
+      searchButton.disabled =
+        true;
+
+      searchButton.innerText =
+        "查詢中…";
+
+
+      try {
+
+        /*
+          呼叫我們自己的
+          Cloudflare Worker
+        */
+
+        const response =
+          await fetch(
+            API +
+            "?code=" +
+            encodeURIComponent(code)
+          );
+
+
+        /*
+          讀取 JSON
+        */
+
+        const data =
+          await response.json();
+
+
+        /*
+          API 回傳失敗
+        */
+
+        if (
+          !response.ok ||
+          !data.success
+        ) {
+
+          throw new Error(
+            data.error ||
+            "目前找不到這個股票代號"
+          );
+        }
+
+
+        /*
+          股票資料
+        */
+
+        const stock =
+          data.stock;
+
+
+        /*
+          顯示股票名稱
+        */
+
+        document.getElementById(
+          "stockName"
+        ).innerText =
+          stock.name || "未知股票";
+
+
+        /*
+          顯示股票代號
+        */
+
+        document.getElementById(
+          "stockCode"
+        ).innerText =
+          stock.code || code;
+
+
+        /*
+          P/E
+        */
+
+        document.getElementById(
+          "pe"
+        ).innerText =
+          formatNumber(stock.pe, " 倍");
+
+
+        /*
+          P/B
+        */
+
+        document.getElementById(
+          "pb"
+        ).innerText =
+          formatNumber(stock.pb, " 倍");
+
+
+        /*
+          殖利率
+        */
+
+        document.getElementById(
+          "yield"
+        ).innerText =
+          formatNumber(
+            stock.dividendYield,
+            "%"
+          );
+
+
+        /*
+          日期
+        */
+
+        document.getElementById(
+          "dataDate"
+        ).innerText =
+          "證交所資料日期：" +
+          formatROCDate(stock.date);
+
+
+        /*
+          清除讀取文字
+        */
+
+        status.innerText =
+          "";
+
+
+        /*
+          顯示結果
+        */
+
+        result.style.display =
+          "block";
+
+      }
+
+      catch (error) {
+
+        console.error(error);
+
+
+        status.className =
+          "status error";
+
+        status.innerText =
+          "查詢失敗 😢\n" +
+          error.message;
+
+
+        result.style.display =
+          "none";
+
+      }
+
+      finally {
+
+        searchButton.disabled =
+          false;
+
+        searchButton.innerText =
+          "查詢股票";
+
+      }
+
     }
 
 
-    document.getElementById("stockName").innerText =
-      stock.Name + " " + stock.Code;
+    /*
+      ==========================================
+      快速查詢
+      ==========================================
+    */
 
+    function quickSearch(code) {
 
-    document.getElementById("pe").innerText =
-      stock.PEratio
-        ? stock.PEratio + " 倍"
-        : "無資料";
+      document.getElementById(
+        "stockInput"
+      ).value = code;
 
-
-    document.getElementById("pb").innerText =
-      stock.PBratio
-        ? stock.PBratio + " 倍"
-        : "無資料";
-
-
-    document.getElementById("yield").innerText =
-      stock.DividendYield
-        ? stock.DividendYield + "%"
-        : "無資料";
-
-
-    document.getElementById("dataDate").innerText =
-      "證交所資料日期：" +
-      formatROCDate(stock.Date);
-
-
-    status.innerText = "";
-
-    result.style.display = "block";
-
-  }
-
-  catch (error) {
-
-    console.error(error);
-
-    status.className = "status error";
-
-    status.innerText =
-      "目前無法直接讀取證交所資料。\n" +
-      "如果看到這段文字，把畫面截圖給我。";
-
-  }
-
-}
-
-
-function formatROCDate(dateString) {
-
-  if (!dateString || dateString.length !== 7) {
-    return dateString || "未知";
-  }
-
-  const rocYear =
-    parseInt(dateString.substring(0, 3));
-
-  const year = rocYear + 1911;
-
-  const month =
-    dateString.substring(3, 5);
-
-  const day =
-    dateString.substring(5, 7);
-
-  return `${year}/${month}/${day}`;
-}
-
-
-document
-  .getElementById("stockInput")
-  .addEventListener("keydown", function(event) {
-
-    if (event.key === "Enter") {
       loadStock();
+
     }
 
-  });
 
-</script>
+    /*
+      ==========================================
+      數字格式
+      ==========================================
+    */
+
+    function formatNumber(
+      value,
+      suffix = ""
+    ) {
+
+      if (
+        value === undefined ||
+        value === null ||
+        value === "" ||
+        value === "-"
+      ) {
+
+        return "無資料";
+
+      }
+
+
+      const number =
+        Number(value);
+
+
+      if (Number.isNaN(number)) {
+
+        return value + suffix;
+
+      }
+
+
+      return (
+        number.toLocaleString(
+          "zh-TW",
+          {
+            maximumFractionDigits: 2
+          }
+        ) +
+        suffix
+      );
+
+    }
+
+
+    /*
+      ==========================================
+      民國日期轉西元日期
+
+      例如：
+      1150924
+      ↓
+      2026/09/24
+      ==========================================
+    */
+
+    function formatROCDate(
+      dateString
+    ) {
+
+      if (!dateString) {
+
+        return "未知";
+
+      }
+
+
+      const value =
+        String(dateString).trim();
+
+
+      if (value.length !== 7) {
+
+        return value;
+
+      }
+
+
+      const rocYear =
+        parseInt(
+          value.substring(0, 3),
+          10
+        );
+
+
+      const year =
+        rocYear + 1911;
+
+
+      const month =
+        value.substring(3, 5);
+
+
+      const day =
+        value.substring(5, 7);
+
+
+      return (
+        year +
+        "/" +
+        month +
+        "/" +
+        day
+      );
+
+    }
+
+
+    /*
+      ==========================================
+      按 Enter 也可以查詢
+      ==========================================
+    */
+
+    document.getElementById(
+      "stockInput"
+    ).addEventListener(
+      "keydown",
+      function(event) {
+
+        if (
+          event.key === "Enter"
+        ) {
+
+          loadStock();
+
+        }
+
+      }
+    );
+
+  </script>
 
 </body>
+
 </html>
