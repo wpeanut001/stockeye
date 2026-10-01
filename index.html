@@ -1,1941 +1,3903 @@
 <!DOCTYPE html>
+
 <html lang="zh-Hant">
 
+
+
 <head>
+
   <meta charset="UTF-8">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <meta name="theme-color" content="#111827">
+
+
 
   <title>StockEye 台股估值工具</title>
 
+
+
   <style>
-    * {
+
+    \* {
+
       box-sizing: border-box;
+
     }
+
+
 
     body {
+
       margin: 0;
+
       font-family:
+
         -apple-system,
+
         BlinkMacSystemFont,
+
         "PingFang TC",
+
         "Segoe UI",
+
         sans-serif;
+
       background: #f3f4f6;
+
       color: #1f2937;
+
     }
+
+
 
     .app {
+
       max-width: 520px;
+
       margin: auto;
+
       min-height: 100vh;
+
       background: #ffffff;
+
       padding: 28px 20px 50px;
+
     }
+
+
 
     .logo {
+
       text-align: center;
+
       font-size: 42px;
+
       margin-top: 5px;
+
     }
+
+
 
     .title {
+
       text-align: center;
+
       font-size: 30px;
+
       font-weight: 800;
+
       margin: 6px 0 4px;
+
     }
+
+
 
     .subtitle {
+
       text-align: center;
+
       color: #6b7280;
+
       margin-bottom: 30px;
+
       line-height: 1.6;
+
       font-size: 15px;
+
     }
+
+
 
     label {
+
       display: block;
+
       font-weight: 700;
+
       margin-bottom: 8px;
+
     }
+
+
 
     input {
+
       width: 100%;
+
       height: 55px;
+
       padding: 0 16px;
+
       font-size: 20px;
+
       border: 1px solid #d1d5db;
+
       border-radius: 14px;
+
       outline: none;
+
     }
+
+
 
     input:focus {
+
       border-color: #111827;
+
     }
+
+
 
     button {
+
       width: 100%;
+
       height: 55px;
+
       margin-top: 14px;
+
       border: 0;
+
       border-radius: 14px;
+
       background: #111827;
+
       color: white;
+
       font-size: 18px;
+
       font-weight: 700;
+
       cursor: pointer;
+
     }
+
+
 
     button:active {
+
       transform: scale(0.99);
+
     }
+
+
 
     button:disabled {
+
       opacity: 0.6;
+
     }
+
+
 
     .quick {
+
       display: flex;
+
       gap: 8px;
+
       margin-top: 10px;
+
     }
+
+
 
     .quick button {
+
       height: 38px;
+
       margin: 0;
+
       background: #f3f4f6;
+
       color: #374151;
+
       font-size: 14px;
+
       font-weight: 600;
+
     }
+
+
 
     .status {
+
       text-align: center;
+
       margin-top: 22px;
+
       color: #6b7280;
+
       white-space: pre-line;
+
       line-height: 1.6;
+
     }
+
+
 
     .error {
+
       color: #b91c1c;
+
     }
+
+
 
     .result {
+
       display: none;
+
       margin-top: 24px;
+
     }
+
+
 
     .main-card {
+
       background: #f8fafc;
+
       border: 1px solid #e5e7eb;
+
       border-radius: 22px;
+
       padding: 20px;
+
     }
+
+
 
     .stock-header {
+
       display: flex;
+
       justify-content: space-between;
+
       align-items: flex-start;
+
       gap: 10px;
+
     }
+
+
 
     .stock-name {
+
       font-size: 26px;
+
       font-weight: 800;
+
     }
+
+
 
     .stock-code {
+
       color: #6b7280;
+
       margin-top: 3px;
+
     }
+
+
 
     .market-tag {
+
       background: #e8f5ee;
+
       color: #18794e;
+
       padding: 7px 11px;
+
       border-radius: 999px;
+
       font-size: 13px;
+
       font-weight: 700;
+
       white-space: nowrap;
+
     }
+
+
 
     .market-tag.etf {
+
       background: #eef2ff;
+
       color: #4338ca;
+
     }
+
+
 
     .date-box {
+
       margin-top: 13px;
+
       padding: 12px 14px;
+
       background: #ffffff;
+
       border: 1px solid #e5e7eb;
+
       border-radius: 13px;
+
       font-size: 13px;
+
       color: #6b7280;
+
       line-height: 1.8;
+
     }
+
+
 
     .date-row {
+
       display: flex;
+
       justify-content: space-between;
+
       gap: 12px;
+
     }
+
+
 
     .date-value {
+
       color: #374151;
+
       font-weight: 700;
+
       text-align: right;
+
     }
+
+
 
     .date-warning {
+
       display: none;
+
       margin-top: 8px;
+
       padding-top: 8px;
+
       border-top: 1px solid #f1f5f9;
+
       color: #92400e;
+
       line-height: 1.6;
+
     }
+
+
 
     .price-card {
+
       margin-top: 18px;
+
       padding: 20px;
+
       background: #111827;
+
       color: white;
+
       border-radius: 17px;
+
     }
+
+
 
     .price-label {
+
       font-size: 14px;
+
       opacity: 0.7;
+
     }
+
+
 
     .price {
+
       font-size: 36px;
+
       font-weight: 800;
+
       margin-top: 3px;
+
     }
+
+
 
     .price-sub {
+
       font-size: 12px;
+
       opacity: 0.65;
+
       margin-top: 5px;
+
     }
+
+
 
     .valuation-card {
+
       margin-top: 13px;
+
       padding: 19px;
+
       border-radius: 17px;
+
       text-align: center;
+
     }
+
+
 
     .valuation-card.cheap {
+
       background: #ecfdf5;
+
       color: #047857;
+
     }
+
+
 
     .valuation-card.fair {
+
       background: #eff6ff;
+
       color: #1d4ed8;
+
     }
+
+
 
     .valuation-card.expensive {
+
       background: #fff7ed;
+
       color: #c2410c;
+
     }
+
+
 
     .valuation-card.unknown {
+
       background: #f3f4f6;
+
       color: #4b5563;
+
     }
+
+
 
     .valuation-card.etf {
+
       background: #eef2ff;
+
       color: #4338ca;
+
     }
+
+
 
     .valuation-small {
+
       font-size: 14px;
+
       font-weight: 600;
+
       opacity: 0.8;
+
     }
+
+
 
     .valuation-big {
+
       font-size: 28px;
+
       font-weight: 800;
+
       margin-top: 3px;
+
     }
+
+
 
     .fair-card,
+
     .meter-card,
+
     .history-card,
+
     .etf-card {
+
       margin-top: 13px;
+
       background: white;
+
       border: 1px solid #e5e7eb;
+
       border-radius: 17px;
+
       padding: 19px;
+
     }
+
+
 
     .section-title {
+
       font-size: 15px;
+
       color: #6b7280;
+
       font-weight: 600;
+
     }
+
+
 
     .fair-range {
+
       font-size: 27px;
+
       font-weight: 800;
+
       margin-top: 6px;
+
     }
+
+
 
     .fair-mid {
+
       color: #6b7280;
+
       font-size: 14px;
+
       margin-top: 7px;
+
     }
+
+
 
     .meter-top {
+
       display: flex;
+
       justify-content: space-between;
+
       align-items: center;
+
     }
+
+
 
     .percentile {
+
       font-size: 22px;
+
       font-weight: 800;
+
     }
+
+
 
     .meter {
+
       position: relative;
+
       height: 12px;
+
       margin-top: 18px;
+
       background:
+
         linear-gradient(
+
           90deg,
+
           #d1fae5 0%,
+
           #dbeafe 50%,
+
           #ffedd5 100%
+
         );
+
       border-radius: 999px;
+
     }
+
+
 
     .meter-dot {
+
       position: absolute;
+
       top: 50%;
+
       width: 20px;
+
       height: 20px;
+
       background: #111827;
+
       border: 3px solid white;
+
       border-radius: 50%;
+
       transform: translate(-50%, -50%);
+
       box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+
     }
+
+
 
     .meter-labels {
+
       display: flex;
+
       justify-content: space-between;
+
       margin-top: 8px;
+
       color: #6b7280;
+
       font-size: 12px;
+
     }
+
+
 
     .grid {
+
       display: grid;
+
       grid-template-columns: 1fr 1fr;
+
       gap: 10px;
+
       margin-top: 13px;
+
     }
+
+
 
     .info-card {
+
       background: white;
+
       border: 1px solid #e5e7eb;
+
       border-radius: 15px;
+
       padding: 15px;
+
     }
+
+
 
     .info-label {
+
       color: #6b7280;
+
       font-size: 13px;
+
       line-height: 1.5;
+
     }
+
+
 
     .info-value {
+
       font-size: 20px;
+
       font-weight: 800;
+
       margin-top: 5px;
+
     }
+
+
 
     .info-note {
+
       font-size: 11px;
+
       color: #9ca3af;
+
       margin-top: 5px;
+
       line-height: 1.5;
+
     }
+
+
 
     .history-row,
+
     .etf-row {
+
       display: flex;
+
       justify-content: space-between;
+
       gap: 15px;
+
       padding: 9px 0;
+
       border-bottom: 1px solid #f1f5f9;
+
     }
+
+
 
     .history-row:last-child,
+
     .etf-row:last-child {
+
       border-bottom: 0;
+
     }
+
+
 
     .history-name,
+
     .etf-name {
+
       color: #6b7280;
+
       font-size: 14px;
+
     }
+
+
 
     .history-value,
+
     .etf-value {
+
       font-weight: 700;
+
       text-align: right;
+
     }
+
+
 
     .explanation {
+
       margin-top: 13px;
+
       padding: 18px;
+
       background: #fefce8;
+
       border-radius: 17px;
+
       color: #713f12;
+
       line-height: 1.75;
+
       font-size: 14px;
+
     }
+
+
 
     .explanation.etf {
+
       background: #eef2ff;
+
       color: #3730a3;
+
     }
+
+
 
     .explanation-title {
+
       font-weight: 800;
+
       margin-bottom: 6px;
+
     }
+
+
 
     .method {
+
       margin-top: 13px;
+
       padding: 17px;
+
       background: #f8fafc;
+
       border-radius: 17px;
+
       color: #64748b;
+
       font-size: 13px;
+
       line-height: 1.7;
+
     }
+
+
 
     .source {
+
       margin-top: 18px;
+
       text-align: right;
+
       color: #9ca3af;
+
       font-size: 12px;
+
     }
 
+
+
     .footer {
+
       margin-top: 28px;
+
       text-align: center;
+
       color: #9ca3af;
+
       font-size: 12px;
+
       line-height: 1.7;
+
     }
+
+
+
 
 
     @media (max-width: 380px) {
+
       .grid {
+
         grid-template-columns: 1fr;
+
       }
+
+
 
       .fair-range {
+
         font-size: 24px;
+
       }
 
+
+
       .stock-name {
+
         font-size: 23px;
+
       }
+
     }
+
   </style>
+
 </head>
+
+
+
 
 
 <body>
 
+
+
 <div class="app">
+
+
 
   <div class="logo">📊</div>
 
+
+
   <div class="title">
+
     StockEye
+
   </div>
 
+
+
   <div class="subtitle">
+
     台股個股・ETF 估值工具<br>
+
     看懂現在價格位於自己的歷史估值哪裡
+
   </div>
+
+
+
 
 
   <label for="stockInput">
+
     股票／ETF 代號
+
   </label>
 
+
+
   <input
+
     id="stockInput"
+
     type="text"
+
     inputmode="numeric"
+
     maxlength="6"
-    placeholder="例如：2330、00918"
+
+    placeholder="例如：2330、6488、00918"
+
     autocomplete="off"
+
   >
 
+
+
   <button
+
     id="searchButton"
+
     onclick="loadStock()"
+
   >
+
     開始估值
+
   </button>
+
+
+
 
 
   <div class="quick">
 
+
+
     <button onclick="quickSearch('2330')">
+
       2330
+
     </button>
+
+
 
     <button onclick="quickSearch('2892')">
+
       2892
+
     </button>
 
+
+
     <button onclick="quickSearch('00918')">
+
       00918
+
     </button>
+
+
 
   </div>
 
 
+
+
+
   <div
+
     id="status"
+
     class="status"
+
   ></div>
 
 
+
+
+
   <div
+
     id="result"
+
     class="result"
+
   >
+
+
 
     <div class="main-card">
 
+
+
       <div class="stock-header">
+
+
 
         <div>
 
-          <div
-            id="stockName"
-            class="stock-name"
-          >
-            --
-          </div>
+
 
           <div
-            id="stockCode"
-            class="stock-code"
+
+            id="stockName"
+
+            class="stock-name"
+
           >
-            --
+
+            \--
+
           </div>
+
+
+
+          <div
+
+            id="stockCode"
+
+            class="stock-code"
+
+          >
+
+            \--
+
+          </div>
+
+
 
         </div>
+
+
+
 
 
         <div
+
           id="marketTag"
+
           class="market-tag"
+
         >
+
           TWSE 上市
+
         </div>
 
+
+
       </div>
+
+
+
 
 
       <!-- 日期 -->
+
       <div class="date-box">
 
+
+
         <div class="date-row">
+
           <span>最新股價資料</span>
+
           <span
+
             id="priceDate"
+
             class="date-value"
+
           >
-            --
+
+            \--
+
           </span>
+
         </div>
 
+
+
         <div
+
           id="valuationDateRow"
+
           class="date-row stock-only"
+
         >
+
           <span>官方估值資料</span>
+
           <span
+
             id="valuationDate"
+
             class="date-value"
+
           >
-            --
+
+            \--
+
           </span>
+
         </div>
 
+
+
         <div
+
           id="dateWarning"
+
           class="date-warning"
+
         ></div>
 
+
+
       </div>
+
+
+
 
 
       <!-- 股價 -->
+
       <div class="price-card">
 
+
+
         <div class="price-label">
+
           最新收盤價
+
         </div>
 
+
+
         <div
+
           id="price"
+
           class="price"
+
         >
-          --
+
+          \--
+
         </div>
 
+
+
         <div
+
           id="priceDateSmall"
+
           class="price-sub"
+
         ></div>
 
+
+
       </div>
+
+
+
 
 
       <!-- 個股估值狀態 -->
+
       <div
+
         id="valuationCard"
+
         class="valuation-card unknown stock-only"
+
       >
 
+
+
         <div class="valuation-small">
+
           StockEye 歷史估值位置
+
         </div>
+
+
 
         <div
+
           id="valuationStatus"
+
           class="valuation-big"
+
         >
-          --
+
+          \--
+
         </div>
 
+
+
       </div>
+
+
+
 
 
       <!-- ETF 模式 -->
+
       <div
+
         id="etfModeCard"
+
         class="valuation-card etf etf-only"
+
       >
 
+
+
         <div class="valuation-small">
+
           StockEye
+
         </div>
+
+
 
         <div class="valuation-big">
+
           ETF 模式
+
         </div>
 
+
+
       </div>
+
+
+
 
 
       <!-- 個股合理價 -->
+
       <div class="fair-card stock-only">
 
+
+
         <div class="section-title">
+
           歷史估值合理價區間
+
         </div>
 
+
+
         <div
+
           id="fairRange"
+
           class="fair-range"
+
         >
-          --
+
+          \--
+
         </div>
 
+
+
         <div
+
           id="fairMid"
+
           class="fair-mid"
+
         >
-          --
+
+          \--
+
         </div>
+
+
 
       </div>
 
 
+
+
+
       <!-- 個股估值尺 -->
+
       <div class="meter-card stock-only">
+
+
 
         <div class="meter-top">
 
+
+
           <div class="section-title">
+
             目前歷史估值位置
+
           </div>
+
+
 
           <div
+
             id="percentile"
+
             class="percentile"
+
           >
-            --
+
+            \--
+
           </div>
 
+
+
         </div>
+
+
+
 
 
         <div class="meter">
 
+
+
           <div
+
             id="meterDot"
+
             class="meter-dot"
+
             style="left:50%;"
+
           ></div>
 
+
+
         </div>
+
+
+
 
 
         <div class="meter-labels">
+
           <span>相對低</span>
+
           <span>中間</span>
+
           <span>相對高</span>
+
         </div>
 
+
+
       </div>
+
+
+
 
 
       <!-- 個股核心數據 -->
+
       <div class="grid stock-only">
 
+
+
         <div class="info-card">
 
+
+
           <div class="info-label">
+
             近四季參考 EPS
+
           </div>
 
+
+
           <div
+
             id="epsTTM"
+
             class="info-value"
+
           >
-            --
+
+            \--
+
           </div>
 
+
+
           <div
+
             id="epsReferenceNote"
+
             class="info-note"
+
           ></div>
 
+
+
         </div>
+
+
+
 
 
         <div class="info-card">
 
+
+
           <div class="info-label">
+
             最新股價推算 P/E
+
           </div>
 
+
+
           <div
+
             id="pe"
+
             class="info-value"
+
           >
-            --
+
+            \--
+
           </div>
+
+
 
           <div class="info-note">
+
             依最新收盤價重新推算
+
           </div>
+
+
 
         </div>
 
 
+
+
+
         <div class="info-card">
 
+
+
           <div class="info-label">
+
             官方 P/B
+
           </div>
 
+
+
           <div
+
             id="pb"
+
             class="info-value"
+
           >
-            --
+
+            \--
+
           </div>
+
+
 
         </div>
 
 
+
+
+
         <div class="info-card">
 
+
+
           <div class="info-label">
+
             官方殖利率
+
           </div>
 
+
+
           <div
+
             id="yield"
+
             class="info-value"
+
           >
-            --
+
+            \--
+
           </div>
+
+
 
         </div>
 
 
+
+
+
         <div class="info-card">
 
+
+
           <div class="info-label">
+
             最新財報累計 EPS
+
           </div>
+
+
 
           <div
+
             id="epsYTD"
+
             class="info-value"
+
           >
-            --
+
+            \--
+
           </div>
 
+
+
         </div>
+
+
+
 
 
         <div class="info-card">
 
+
+
           <div class="info-label">
+
             財報期間
+
           </div>
+
+
 
           <div
+
             id="financialPeriod"
+
             class="info-value"
+
           >
-            --
+
+            \--
+
           </div>
 
+
+
         </div>
+
+
 
       </div>
+
+
+
 
 
       <!-- 個股歷史 P/E -->
+
       <div class="history-card stock-only">
 
+
+
         <div class="section-title">
+
           最近 12 個月 P/E 分布
+
         </div>
+
+
+
 
 
         <div class="history-row">
 
+
+
           <div class="history-name">
+
             相對低檔（第25百分位）
+
           </div>
 
+
+
           <div
+
             id="pe25"
+
             class="history-value"
+
           >
-            --
+
+            \--
+
           </div>
+
+
 
         </div>
 
 
+
+
+
         <div class="history-row">
 
+
+
           <div class="history-name">
+
             歷史中位數
+
           </div>
 
+
+
           <div
+
             id="pe50"
+
             class="history-value"
+
           >
-            --
+
+            \--
+
           </div>
+
+
 
         </div>
 
 
+
+
+
         <div class="history-row">
 
+
+
           <div class="history-name">
+
             相對高檔（第75百分位）
+
           </div>
+
+
 
           <div
+
             id="pe75"
+
             class="history-value"
+
           >
-            --
+
+            \--
+
           </div>
 
+
+
         </div>
+
+
+
 
 
         <div class="history-row">
 
+
+
           <div class="history-name">
+
             歷史樣本
+
           </div>
+
+
 
           <div
+
             id="sampleCount"
+
             class="history-value"
+
           >
-            --
+
+            \--
+
           </div>
 
+
+
         </div>
+
+
 
       </div>
+
+
+
 
 
       <!-- ETF 行情 -->
+
       <div class="etf-card etf-only">
 
+
+
         <div class="section-title">
+
           ETF 最新行情
+
         </div>
 
+
+
         <div class="etf-row">
+
           <div class="etf-name">開盤</div>
+
           <div id="etfOpen" class="etf-value">--</div>
+
         </div>
 
+
+
         <div class="etf-row">
+
           <div class="etf-name">最高</div>
+
           <div id="etfHigh" class="etf-value">--</div>
+
         </div>
 
+
+
         <div class="etf-row">
+
           <div class="etf-name">最低</div>
+
           <div id="etfLow" class="etf-value">--</div>
+
         </div>
 
+
+
         <div class="etf-row">
+
           <div class="etf-name">成交量</div>
+
           <div id="etfVolume" class="etf-value">--</div>
+
         </div>
+
+
 
       </div>
+
+
+
 
 
       <!-- ETF 基本資料 -->
+
       <div class="etf-card etf-only">
 
+
+
         <div class="section-title">
+
           ETF 基本資料
+
         </div>
 
+
+
         <div class="etf-row">
+
           <div class="etf-name">基金類型</div>
+
           <div id="etfType" class="etf-value">--</div>
+
         </div>
 
+
+
         <div class="etf-row">
+
           <div class="etf-name">追蹤指數</div>
+
           <div id="etfIndex" class="etf-value">--</div>
+
         </div>
 
+
+
         <div class="etf-row">
+
           <div class="etf-name">上市日期</div>
+
           <div id="etfListingDate" class="etf-value">--</div>
+
         </div>
+
+
 
       </div>
+
+
+
 
 
       <!-- 個股說明 -->
+
       <div
+
         id="stockExplanationBox"
+
         class="explanation stock-only"
+
       >
 
+
+
         <div class="explanation-title">
+
           💡 為什麼是這個估值？
+
         </div>
+
+
 
         <div id="explanation">
-          --
+
+          \--
+
         </div>
 
+
+
       </div>
+
+
+
 
 
       <!-- ETF 說明 -->
+
       <div
+
         class="explanation etf etf-only"
+
       >
 
+
+
         <div class="explanation-title">
+
           💡 ETF 為什麼不能直接套個股 P/E？
+
         </div>
+
+
 
         <div>
+
           ETF 是一籃子資產，不適合直接使用單一公司的
+
           EPS × P/E 模型。StockEye 已自動切換成 ETF 模式。
+
           下一階段將加入淨值溢折價、配息與歷史殖利率等 ETF 專用估值資料。
+
         </div>
 
+
+
       </div>
+
+
+
 
 
       <!-- 個股方法 -->
+
       <div class="method stock-only">
+
+
 
         <strong>StockEye 個股計算方式</strong><br>
 
-        近四季參考 EPS：使用「官方 P/E 資料日的收盤價 ÷ 同日 TWSE 官方 P/E」推導。<br>
+
+
+        近四季參考 EPS：使用「P/E 資料日的收盤價 ÷ 同日 P/E」推導。<br>
+
+
 
         目前 P/E：使用「最新收盤價 ÷ 近四季參考 EPS」重新推算。<br>
 
+
+
         合理 P/E：使用該股票最近 12 個月每日 P/E，第 25～75 百分位作為近期相對合理區間。<br>
+
+
 
         合理價：近四季參考 EPS × 歷史合理 P/E 區間。<br><br>
 
+
+
         當最新股價日期與官方估值資料日期不同時，
+
         StockEye 不會直接把不同日期的股價與 P/E 混在一起計算。<br><br>
 
+
+
         此模型描述的是股票相對於自身近期歷史估值的位置，
+
         並非未來股價預測。
 
+
+
       </div>
+
+
+
 
 
       <!-- ETF 方法 -->
+
       <div class="method etf-only">
+
+
 
         <strong>StockEye ETF 模式</strong><br>
 
+
+
         ETF 與個股採用不同估值方法，因此不使用單一公司的
+
         EPS／P/E 合理價模型。<br><br>
 
+
+
         目前先顯示 TWSE 最新交易行情與 ETF 基本資料；
+
         ETF 專用合理價模型將另外加入。
 
+
+
       </div>
 
 
-      <div class="source">
+
+
+
+      <div id="sourceText" class="source">
+
         資料來源：臺灣證券交易所 TWSE／公開資訊觀測站 MOPS
+
       </div>
+
+
 
     </div>
 
+
+
   </div>
+
+
+
 
 
   <div class="footer">
+
     StockEye 僅提供公開資料整理與歷史統計估值參考<br>
+
     不構成投資建議
+
   </div>
+
+
 
 </div>
 
 
+
+
+
 <script>
 
+
+
   const API =
+
     "https://stockeye-api.wpeanut001.workers.dev/";
+
+
+
 
 
   async function loadStock() {
 
+
+
     const input =
+
       document.getElementById("stockInput");
 
+
+
     const code =
+
       input.value.trim();
 
+
+
     const status =
+
       document.getElementById("status");
 
+
+
     const result =
+
       document.getElementById("result");
 
+
+
     const button =
+
       document.getElementById("searchButton");
 
 
+
+
+
     if (!code) {
+
       alert("請輸入股票或 ETF 代號 😊");
+
       return;
+
     }
+
+
+
 
 
     if (!/^[0-9]{4,6}$/.test(code)) {
 
+
+
       status.className =
+
         "status error";
 
+
+
       status.innerText =
+
         "股票／ETF 代號格式不正確";
 
+
+
       return;
+
     }
 
 
+
+
+
     status.className =
+
       "status";
 
+
+
     status.innerText =
+
       "正在取得最新資料…";
 
+
+
     result.style.display =
+
       "none";
 
+
+
     button.disabled =
+
       true;
 
+
+
     button.innerText =
+
       "查詢中…";
+
+
+
 
 
     try {
 
+
+
       const response =
+
         await fetch(
+
           API +
+
           "?code=" +
+
           encodeURIComponent(code)
+
         );
 
+
+
       const data =
+
         await response.json();
 
 
+
+
+
       if (
+
         !response.ok ||
+
         !data.success
+
       ) {
 
+
+
         throw new Error(
+
           data.error ||
+
           "查詢失敗"
+
         );
+
       }
+
+
+
 
 
       const stock =
+
         data.stock;
 
+
+
       if (
+
         data.type === "etf" ||
+
         stock.type === "etf"
+
       ) {
+
+
 
         renderETF(stock);
 
+
+
       } else {
 
+
+
         renderStock(stock);
+
       }
 
 
+
+
+
       status.innerText =
+
         "";
 
+
+
       result.style.display =
+
         "block";
 
+
+
     }
+
+
 
     catch (error) {
 
+
+
       console.error(error);
 
+
+
       status.className =
+
         "status error";
 
+
+
       status.innerText =
+
         "查詢失敗 😢\n" +
+
         error.message;
 
+
+
     }
+
+
 
     finally {
 
+
+
       button.disabled =
+
         false;
 
+
+
       button.innerText =
+
         "開始估值";
+
+
 
     }
 
+
+
   }
+
+
+
 
 
   function renderStock(stock) {
 
+
+
     showMode("stock");
 
+
+
     const history =
+
       stock.historicalPE || {};
 
+
+
     const fair =
+
       stock.fairValue || {};
 
+
+
     const valuation =
+
       stock.valuation || {};
 
 
-    setText(
-      "stockName",
-      stock.name || "未知股票"
-    );
+
+
 
     setText(
-      "stockCode",
-      stock.code || "--"
+
+      "stockName",
+
+      stock.name || "未知股票"
+
     );
+
+
+
+    setText(
+
+      "stockCode",
+
+      stock.code || "--"
+
+    );
+
+
 
     const marketTag =
+
       document.getElementById("marketTag");
 
+
+
     marketTag.className =
+
       "market-tag";
 
-    marketTag.innerText =
-      "TWSE 上市";
+
+
+    if (stock.market === "TPEx") {
+    marketTag.innerText = "TPEx 上櫃";
+  } else {
+    marketTag.innerText = "TWSE 上市";
+  }
+
+
+
 
 
     setText(
+
       "priceDate",
+
       formatDate(stock.priceDate || stock.dateISO || stock.date)
+
     );
 
+
+
     setText(
+
       "valuationDate",
+
       formatDate(stock.valuationDate)
+
     );
 
+
+
     setText(
+
       "priceDateSmall",
+
       "股價資料：" +
+
       formatDate(stock.priceDate || stock.dateISO || stock.date)
+
     );
+
+
+
 
 
     const warning =
+
       document.getElementById("dateWarning");
+
+
 
     if (stock.dataDateWarning) {
 
+
+
       warning.style.display =
+
         "block";
 
+
+
       warning.innerText =
+
         "ⓘ " + stock.dataDateWarning;
+
+
 
     } else {
 
+
+
       warning.style.display =
+
         "none";
 
+
+
       warning.innerText =
+
         "";
+
+
 
     }
 
 
+
+
+
     setText(
+
       "price",
+
       formatMoney(stock.price)
+
     );
+
+
+
 
 
     setText(
+
       "valuationStatus",
+
       valuation.status || "資料不足"
+
     );
+
+
+
 
 
     const valuationCard =
+
       document.getElementById(
+
         "valuationCard"
+
       );
 
+
+
     valuationCard.className =
+
       "valuation-card stock-only " +
+
       (
+
         valuation.level ||
+
         "unknown"
+
       );
+
+
+
 
 
     if (
+
       isNumber(fair.low) &&
+
       isNumber(fair.high)
+
     ) {
 
+
+
       setText(
+
         "fairRange",
+
         formatMoney(fair.low) +
+
         " ～ " +
+
         formatMoney(fair.high)
+
       );
+
+
 
     } else {
 
+
+
       setText(
+
         "fairRange",
+
         "資料不足"
+
       );
 
+
+
     }
+
+
+
 
 
     if (isNumber(fair.mid)) {
 
+
+
       setText(
+
         "fairMid",
+
         "歷史 P/E 中位數推算：約 " +
+
         formatMoney(fair.mid)
+
       );
+
+
 
     } else {
 
+
+
       setText(
+
         "fairMid",
+
         ""
+
       );
 
+
+
     }
+
+
+
 
 
     if (
+
       isNumber(
+
         history.currentPercentile
+
       )
+
     ) {
 
+
+
       const percentile =
+
         Math.max(
+
           0,
+
           Math.min(
+
             100,
+
             Number(
+
               history.currentPercentile
+
             )
+
           )
+
         );
 
+
+
       setText(
+
         "percentile",
+
         percentile.toFixed(1) +
+
         "%"
+
       );
 
+
+
       document.getElementById(
+
         "meterDot"
+
       ).style.left =
+
         percentile + "%";
+
+
 
     } else {
 
+
+
       setText(
+
         "percentile",
+
         "--"
+
       );
 
+
+
       document.getElementById(
+
         "meterDot"
+
       ).style.left =
+
         "50%";
+
+
 
     }
 
 
+
+
+
     setText(
+
       "epsTTM",
+
       formatEPS(
+
         stock.epsTTMReference
+
       )
+
     );
+
+
+
 
 
     let epsNote = "";
 
+
+
     if (
+
       stock.epsReferenceDate &&
+
       isNumber(stock.epsReferencePrice)
+
     ) {
 
+
+
       epsNote =
+
         formatDate(stock.epsReferenceDate) +
+
         " 收盤 " +
+
         formatMoney(stock.epsReferencePrice) +
+
         " 推導";
+
+
 
     }
 
+
+
     setText(
+
       "epsReferenceNote",
+
       epsNote
+
     );
 
 
+
+
+
     setText(
+
       "pe",
+
       formatMultiple(
+
         stock.estimatedCurrentPE
+
       )
+
     );
 
 
+
+
+
     setText(
+
       "pb",
+
       formatMultiple(
+
         stock.pb
+
       )
+
     );
 
 
+
+
+
     setText(
+
       "yield",
+
       formatPercent(
+
         stock.dividendYield
+
       )
+
     );
 
 
+
+
+
     setText(
+
       "epsYTD",
+
       formatEPS(
+
         stock.epsYTD
+
       )
+
     );
 
 
+
+
+
     setText(
+
       "financialPeriod",
+
       formatFinancialPeriod(
+
         stock.financialYear,
+
         stock.financialQuarter
+
       )
+
     );
 
 
+
+
+
     setText(
+
       "pe25",
+
       formatMultiple(
+
         history.p25
+
       )
+
     );
 
 
+
+
+
     setText(
+
       "pe50",
+
       formatMultiple(
+
         history.median
+
       )
+
     );
 
 
+
+
+
     setText(
+
       "pe75",
+
       formatMultiple(
+
         history.p75
+
       )
+
     );
 
 
+
+
+
     setText(
+
       "sampleCount",
+
       isNumber(history.sampleCount)
+
         ? history.sampleCount + " 筆"
+
         : "--"
+
     );
+
+
+
 
 
     setText(
+
       "explanation",
+
       valuation.explanation ||
+
       "目前資料不足，暫時無法進行估值判斷。"
+
     );
 
+
+
+  
+  const sourceText =
+    document.getElementById("sourceText");
+
+  if (sourceText) {
+    sourceText.innerText =
+      stock.market === "TPEx"
+        ? "資料來源：FinMind／臺北證券櫃檯買賣中心 TPEx"
+        : "資料來源：臺灣證券交易所 TWSE／公開資訊觀測站 MOPS";
   }
+
+}
+
+
+
 
 
   function renderETF(stock) {
 
+
+
     showMode("etf");
 
 
-    setText(
-      "stockName",
-      stock.name || "未知 ETF"
-    );
+
+
 
     setText(
-      "stockCode",
-      stock.code || "--"
+
+      "stockName",
+
+      stock.name || "未知 ETF"
+
     );
+
+
+
+    setText(
+
+      "stockCode",
+
+      stock.code || "--"
+
+    );
+
+
+
 
 
     const marketTag =
+
       document.getElementById("marketTag");
 
+
+
     marketTag.className =
+
       "market-tag etf";
 
+
+
     marketTag.innerText =
+
       "TWSE ETF";
 
 
+
+
+
     const date =
+
       formatDate(
+
         stock.dateISO ||
+
         stock.date
+
       );
 
 
-    setText(
-      "priceDate",
-      date
-    );
+
+
 
     setText(
-      "priceDateSmall",
-      "股價資料：" + date
+
+      "priceDate",
+
+      date
+
     );
+
+
+
+    setText(
+
+      "priceDateSmall",
+
+      "股價資料：" + date
+
+    );
+
+
+
 
 
     const warning =
+
       document.getElementById("dateWarning");
 
+
+
     warning.style.display =
+
       "none";
 
+
+
     warning.innerText =
+
       "";
 
 
+
+
+
     setText(
+
       "price",
+
       formatMoney(stock.price)
+
     );
 
 
+
+
+
     setText(
+
       "etfOpen",
+
       formatMoney(stock.open)
+
     );
 
+
+
     setText(
+
       "etfHigh",
+
       formatMoney(stock.high)
+
     );
 
+
+
     setText(
+
       "etfLow",
+
       formatMoney(stock.low)
+
     );
 
+
+
     setText(
+
       "etfVolume",
+
       formatVolume(stock.volume)
+
     );
+
+
+
 
 
     const profile =
+
       stock.etfProfile || {};
 
 
+
+
+
     setText(
+
       "etfType",
+
       profile["基金類型"] || "--"
+
     );
 
 
+
+
+
     setText(
+
       "etfIndex",
+
       profile["標的指數/追蹤指數名稱"] ||
+
       "--"
+
     );
+
+
+
 
 
     setText(
+
       "etfListingDate",
+
       formatCompactROCDate(
+
         profile["上市日期"]
+
       )
+
     );
 
+
+
+  
+  const sourceText =
+    document.getElementById("sourceText");
+
+  if (sourceText) {
+    sourceText.innerText =
+      "資料來源：臺灣證券交易所 TWSE／公開資訊觀測站 MOPS";
   }
+
+}
+
+
+
 
 
   function showMode(mode) {
 
+
+
     const stockElements =
+
       document.querySelectorAll(
+
         ".stock-only"
+
       );
 
+
+
     const etfElements =
+
       document.querySelectorAll(
+
         ".etf-only"
+
       );
+
+
+
 
 
     stockElements.forEach(
+
       element => {
 
+
+
         element.style.display =
+
           mode === "stock"
+
             ? ""
+
             : "none";
 
+
+
       }
+
     );
+
+
+
 
 
     etfElements.forEach(
+
       element => {
 
+
+
         element.style.display =
+
           mode === "etf"
+
             ? ""
+
             : "none";
 
+
+
       }
+
     );
 
+
+
   }
+
+
+
 
 
   function quickSearch(code) {
 
+
+
     document.getElementById(
+
       "stockInput"
+
     ).value =
+
       code;
+
+
 
     loadStock();
 
+
+
   }
+
+
+
 
 
   function setText(id, text) {
 
+
+
     const element =
+
       document.getElementById(id);
 
+
+
     if (element) {
+
       element.innerText =
+
         text ?? "";
+
     }
 
+
+
   }
+
+
+
 
 
   function isNumber(value) {
 
+
+
     return (
+
       value !== null &&
+
       value !== undefined &&
+
       value !== "" &&
+
       Number.isFinite(
+
         Number(value)
+
       )
+
     );
 
+
+
   }
+
+
+
 
 
   function formatMoney(value) {
 
+
+
     if (!isNumber(value)) {
+
       return "--";
+
     }
 
+
+
     const number =
+
       Number(value);
 
+
+
     return (
+
       number.toLocaleString(
+
         "zh-TW",
+
         {
+
           minimumFractionDigits:
+
             number % 1 === 0
+
               ? 0
+
               : 2,
 
+
+
           maximumFractionDigits: 2
+
         }
+
       ) +
+
       " 元"
+
     );
 
+
+
   }
+
+
+
 
 
   function formatEPS(value) {
 
+
+
     if (!isNumber(value)) {
+
       return "--";
+
     }
 
+
+
     return (
+
       Number(value)
+
         .toLocaleString(
+
           "zh-TW",
+
           {
+
             minimumFractionDigits: 2,
+
             maximumFractionDigits: 2
+
           }
+
         )
+
       +
+
       " 元"
+
     );
 
+
+
   }
+
+
+
 
 
   function formatMultiple(value) {
 
+
+
     if (!isNumber(value)) {
+
       return "--";
+
     }
 
+
+
     return (
+
       Number(value)
+
         .toFixed(2)
+
       +
+
       " 倍"
+
     );
 
+
+
   }
+
+
+
 
 
   function formatPercent(value) {
 
+
+
     if (!isNumber(value)) {
+
       return "--";
+
     }
 
+
+
     return (
+
       Number(value)
+
         .toFixed(2)
+
       +
+
       "%"
+
     );
 
+
+
   }
+
+
+
 
 
   function formatVolume(value) {
 
+
+
     if (!isNumber(value)) {
+
       return "--";
+
     }
 
+
+
     const number =
+
       Number(value);
+
+
 
     if (number >= 1000000) {
 
+
+
       return (
+
         (
+
           number /
+
           1000000
+
         ).toFixed(2) +
+
         " 百萬股"
+
       );
+
+
 
     }
 
+
+
     return (
+
       number.toLocaleString(
+
         "zh-TW"
+
       ) +
+
       " 股"
+
     );
 
+
+
   }
+
+
+
 
 
   function formatDate(value) {
 
+
+
     if (!value) {
+
       return "未知";
+
     }
 
+
+
     const date =
+
       String(value)
+
         .trim();
 
 
+
+
+
     if (
+
       /^\d{4}-\d{2}-\d{2}$/.test(date)
+
     ) {
+
+
 
       return date.replaceAll(
+
         "-",
+
         "/"
+
       );
 
+
+
     }
+
+
+
 
 
     if (
+
       /^\d{2,3}\/\d{2}\/\d{2}$/.test(date)
+
     ) {
 
+
+
       const parts =
+
         date.split("/");
 
+
+
       const year =
+
         Number(parts[0]) +
+
         1911;
 
+
+
       return (
+
         year +
+
         "/" +
+
         parts[1] +
+
         "/" +
+
         parts[2]
+
       );
 
+
+
     }
+
+
+
 
 
     if (/^\d{7}$/.test(date)) {
 
+
+
       const year =
+
         Number(
+
           date.substring(0, 3)
+
         ) + 1911;
 
+
+
       const month =
+
         date.substring(3, 5);
 
+
+
       const day =
+
         date.substring(5, 7);
 
+
+
       return (
+
         year +
+
         "/" +
+
         month +
+
         "/" +
+
         day
+
       );
 
+
+
     }
+
+
+
 
 
     return date;
 
+
+
   }
+
+
+
 
 
   function formatCompactROCDate(value) {
 
+
+
     if (!value) {
+
       return "--";
+
     }
 
+
+
     const date =
+
       String(value)
+
         .trim();
+
+
+
 
 
     if (/^\d{7}$/.test(date)) {
 
+
+
       const year =
+
         Number(
+
           date.substring(0, 3)
+
         ) + 1911;
 
+
+
       const month =
+
         date.substring(3, 5);
 
+
+
       const day =
+
         date.substring(5, 7);
 
+
+
       return (
+
         year +
+
         "/" +
+
         month +
+
         "/" +
+
         day
+
       );
 
+
+
     }
+
+
+
 
 
     return formatDate(date);
 
+
+
   }
+
+
+
 
 
   function formatFinancialPeriod(
+
     year,
+
     quarter
+
   ) {
 
+
+
     if (
+
       !year ||
+
       !quarter
+
     ) {
+
       return "--";
+
     }
+
+
+
 
 
     let numericYear =
+
       Number(year);
 
 
+
+
+
     if (
+
       Number.isFinite(numericYear) &&
+
       numericYear < 1911
+
     ) {
 
+
+
       numericYear +=
+
         1911;
+
+
 
     }
 
 
+
+
+
     return (
+
       numericYear +
+
       " Q" +
+
       quarter
+
     );
+
+
 
   }
 
 
+
+
+
   document.getElementById(
+
     "stockInput"
+
   ).addEventListener(
+
     "keydown",
+
     function(event) {
 
+
+
       if (
+
         event.key === "Enter"
+
       ) {
+
+
 
         loadStock();
 
+
+
       }
 
+
+
     }
+
   );
+
+
 
 </script>
 
+
+
 </body>
+
 </html>
