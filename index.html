@@ -922,6 +922,300 @@
 
     }
 
+
+    /* ===== StockEye AI 技術圖分析 ===== */
+    .ai-section {
+      margin-top: 30px;
+      padding-top: 24px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .ai-hero {
+      padding: 20px;
+      border-radius: 22px;
+      background: linear-gradient(145deg, #111827, #1f2937);
+      color: #ffffff;
+      box-shadow: 0 12px 30px rgba(17, 24, 39, 0.12);
+    }
+
+    .ai-title {
+      font-size: 23px;
+      font-weight: 800;
+      margin-bottom: 7px;
+    }
+
+    .ai-subtitle {
+      color: #d1d5db;
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    .ai-upload-card {
+      margin-top: 13px;
+      padding: 18px;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+    }
+
+    .ai-file-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 104px;
+      padding: 18px;
+      border: 2px dashed #cbd5e1;
+      border-radius: 16px;
+      background: #f8fafc;
+      color: #475569;
+      text-align: center;
+      line-height: 1.6;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
+    .ai-file-label:hover {
+      border-color: #64748b;
+      background: #f1f5f9;
+    }
+
+    .ai-file-label strong {
+      color: #111827;
+    }
+
+    .ai-file-input {
+      display: none;
+    }
+
+    .ai-preview-wrap {
+      display: none;
+      margin-top: 14px;
+      padding: 10px;
+      background: #0f172a;
+      border-radius: 16px;
+    }
+
+    .ai-preview {
+      display: block;
+      width: 100%;
+      max-height: 520px;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+
+    .ai-file-meta {
+      margin-top: 9px;
+      color: #64748b;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .ai-analyze-button {
+      background: #2563eb;
+    }
+
+    .ai-analyze-button:disabled {
+      cursor: not-allowed;
+    }
+
+    .ai-status {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 13px;
+      background: #f8fafc;
+      color: #475569;
+      font-size: 14px;
+      line-height: 1.6;
+      display: none;
+    }
+
+    .ai-status.error {
+      display: block;
+      color: #991b1b;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+    }
+
+    .ai-status.loading {
+      display: block;
+      color: #1d4ed8;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+    }
+
+    .ai-result {
+      display: none;
+      margin-top: 14px;
+    }
+
+    .ai-overall {
+      border-radius: 20px;
+      padding: 20px;
+      border: 1px solid #e5e7eb;
+      background: #f8fafc;
+    }
+
+    .ai-overall.bullish {
+      background: #ecfdf5;
+      border-color: #a7f3d0;
+      color: #065f46;
+    }
+
+    .ai-overall.neutral {
+      background: #fffbeb;
+      border-color: #fde68a;
+      color: #92400e;
+    }
+
+    .ai-overall.bearish {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: #991b1b;
+    }
+
+    .ai-overall.insufficient {
+      background: #f3f4f6;
+      border-color: #d1d5db;
+      color: #4b5563;
+    }
+
+    .ai-overall-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .ai-overall-status {
+      font-size: 25px;
+      font-weight: 900;
+    }
+
+    .ai-score {
+      min-width: 78px;
+      text-align: center;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.72);
+      font-weight: 900;
+    }
+
+    .ai-stage {
+      margin-top: 7px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .ai-summary {
+      margin-top: 12px;
+      line-height: 1.75;
+      font-size: 14px;
+      white-space: pre-wrap;
+    }
+
+    .ai-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .ai-card {
+      padding: 17px;
+      border: 1px solid #e5e7eb;
+      border-radius: 17px;
+      background: #ffffff;
+    }
+
+    .ai-card-title {
+      font-weight: 900;
+      font-size: 16px;
+      margin-bottom: 10px;
+      color: #111827;
+    }
+
+    .ai-line {
+      margin-top: 7px;
+      color: #374151;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .ai-line:first-child {
+      margin-top: 0;
+    }
+
+    .ai-signal {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .ai-signal:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .ai-signal-dot {
+      flex: 0 0 auto;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .ai-signal-name {
+      font-weight: 800;
+      color: #1f2937;
+    }
+
+    .ai-signal-reason {
+      margin-top: 2px;
+      color: #64748b;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .ai-chip-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 8px;
+    }
+
+    .ai-chip {
+      display: inline-flex;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .ai-risk-card {
+      background: #fff7ed;
+      border-color: #fed7aa;
+    }
+
+    .ai-disclaimer {
+      margin-top: 12px;
+      padding: 13px 15px;
+      border-radius: 14px;
+      background: #f8fafc;
+      color: #64748b;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .ai-raw {
+      white-space: pre-wrap;
+      line-height: 1.7;
+      font-size: 13px;
+      color: #334155;
+    }
+
+
   </style>
 
 </head>
@@ -2076,6 +2370,58 @@
 
 
 
+
+
+  <!-- AI 技術圖分析 -->
+  <section class="ai-section" id="aiAnalysisSection">
+    <div class="ai-hero">
+      <div class="ai-title">📷 AI 技術圖交叉分析</div>
+      <div class="ai-subtitle">
+        上傳券商 K 線截圖，StockEye 會從趨勢結構、型態、均線、量價、動能、乖離與風控交叉判讀。<br>
+        圖上沒有的資料不猜測；型態會區分「形成中」與「已確認」。
+      </div>
+    </div>
+
+    <div class="ai-upload-card">
+      <label class="ai-file-label" for="chartImageInput">
+        <span>
+          <strong>點這裡選擇技術分析圖片</strong><br>
+          支援 JPG、PNG、WEBP，建議直接上傳券商完整 K 線截圖
+        </span>
+      </label>
+      <input
+        id="chartImageInput"
+        class="ai-file-input"
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        onchange="handleChartImage(event)"
+      >
+
+      <div id="aiPreviewWrap" class="ai-preview-wrap">
+        <img id="aiPreview" class="ai-preview" alt="技術圖預覽">
+      </div>
+      <div id="aiFileMeta" class="ai-file-meta"></div>
+
+      <button
+        id="aiAnalyzeButton"
+        class="ai-analyze-button"
+        onclick="analyzeChartImage()"
+        disabled
+      >
+        開始 AI 技術分析
+      </button>
+
+      <div id="aiStatus" class="ai-status"></div>
+      <div id="aiResult" class="ai-result"></div>
+    </div>
+
+    <div class="ai-disclaimer">
+      StockEye 技術圖分析只根據上傳圖表中可見資訊做機率判讀，不保證未來走勢，也不構成個人化投資建議。
+      重要訊號應以「趨勢＋關鍵價位＋量價＋動能」交叉確認，並事先設定失效條件。
+    </div>
+  </section>
+
+
   <div class="footer">
 
     StockEye 僅提供公開資料整理與歷史統計估值參考<br>
@@ -2099,6 +2445,11 @@
   const API =
 
     "https://stockeye-api.wpeanut001.workers.dev/";
+
+
+  // AI 技術圖分析 Worker。若你的 Worker 名稱不同，只需要改這一行。
+  const AI_API =
+    "https://stockeye-ai.wpeanut001.workers.dev/analyze";
 
 
 
@@ -3894,6 +4245,356 @@
 
   );
 
+
+
+  let selectedChartFile = null;
+  let selectedChartDataUrl = "";
+
+  function handleChartImage(event) {
+    const file = event.target.files && event.target.files[0];
+    const status = document.getElementById("aiStatus");
+    const button = document.getElementById("aiAnalyzeButton");
+    const previewWrap = document.getElementById("aiPreviewWrap");
+    const preview = document.getElementById("aiPreview");
+    const meta = document.getElementById("aiFileMeta");
+    const result = document.getElementById("aiResult");
+
+    selectedChartFile = null;
+    selectedChartDataUrl = "";
+    button.disabled = true;
+    result.style.display = "none";
+    result.innerHTML = "";
+    status.style.display = "none";
+    status.className = "ai-status";
+    status.innerText = "";
+
+    if (!file) {
+      previewWrap.style.display = "none";
+      meta.innerText = "";
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      showAiError("請選擇 JPG、PNG 或 WEBP 圖片。");
+      return;
+    }
+
+    if (file.size > 12 * 1024 * 1024) {
+      showAiError("圖片太大，請使用 12 MB 以下的截圖。");
+      return;
+    }
+
+    selectedChartFile = file;
+    preview.src = URL.createObjectURL(file);
+    previewWrap.style.display = "block";
+    meta.innerText = `${file.name}・${(file.size / 1024 / 1024).toFixed(2)} MB`;
+    button.disabled = false;
+  }
+
+  async function analyzeChartImage() {
+    if (!selectedChartFile) {
+      showAiError("請先選擇一張技術分析圖片。");
+      return;
+    }
+
+    const button = document.getElementById("aiAnalyzeButton");
+    const status = document.getElementById("aiStatus");
+    const result = document.getElementById("aiResult");
+    const stockHint = document.getElementById("stockInput").value.trim();
+
+    button.disabled = true;
+    button.innerText = "分析中…";
+    status.className = "ai-status loading";
+    status.innerText = "正在讀取 K 線、指標與量價資訊，並進行交叉分析…\n通常需要幾秒到半分鐘。";
+    result.style.display = "none";
+    result.innerHTML = "";
+
+    try {
+      selectedChartDataUrl = await compressChartImage(selectedChartFile);
+
+      const response = await fetch(AI_API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          image: selectedChartDataUrl,
+          stockHint: stockHint || null
+        })
+      });
+
+      let data;
+      try {
+        data = await response.json();
+      } catch (_) {
+        throw new Error("AI 服務回傳格式不正確");
+      }
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || "AI 分析失敗");
+      }
+
+      renderAiAnalysis(data.analysis || data);
+      status.style.display = "none";
+      status.className = "ai-status";
+      status.innerText = "";
+    } catch (error) {
+      let message = error && error.message ? error.message : "AI 分析失敗";
+      if (/Failed to fetch/i.test(message)) {
+        message = "目前連不到 AI 分析服務。請確認 Cloudflare 的 stockeye-ai Worker 已部署，且 AI Binding 名稱為 AI。";
+      }
+      showAiError(message);
+    } finally {
+      button.disabled = false;
+      button.innerText = "重新分析這張圖";
+    }
+  }
+
+  function showAiError(message) {
+    const status = document.getElementById("aiStatus");
+    status.className = "ai-status error";
+    status.innerText = message;
+    status.style.display = "block";
+  }
+
+  function compressChartImage(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error("圖片讀取失敗"));
+      reader.onload = () => {
+        const img = new Image();
+        img.onerror = () => reject(new Error("無法解析圖片"));
+        img.onload = () => {
+          const maxSide = 1800;
+          const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+          const width = Math.max(1, Math.round(img.width * scale));
+          const height = Math.max(1, Math.round(img.height * scale));
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d", { alpha: false });
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, width, height);
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL("image/jpeg", 0.88));
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function renderAiAnalysis(analysis) {
+    const result = document.getElementById("aiResult");
+
+    if (!analysis || typeof analysis !== "object") {
+      result.innerHTML = `<div class="ai-card"><div class="ai-raw">${escapeHtml(String(analysis || "沒有取得分析內容"))}</div></div>`;
+      result.style.display = "block";
+      return;
+    }
+
+    const overall = analysis.overall || {};
+    const statusText = overall.status || "資料不足";
+    const score = Number.isFinite(Number(overall.score)) ? Math.max(0, Math.min(100, Number(overall.score))) : null;
+    const stage = overall.stage || "尚未判定";
+    const tone = overallTone(statusText);
+    const icon = overallIcon(statusText);
+
+    let html = `
+      <div class="ai-overall ${tone}">
+        <div class="ai-overall-top">
+          <div class="ai-overall-status">${icon} ${escapeHtml(statusText)}</div>
+          <div class="ai-score">${score === null ? "--" : Math.round(score)} / 100</div>
+        </div>
+        <div class="ai-stage">目前階段：${escapeHtml(stage)}</div>
+        <div class="ai-summary">${escapeHtml(overall.summary || analysis.summary || "")}</div>
+      </div>
+      <div class="ai-grid">
+    `;
+
+    html += renderAiSection("📈 趨勢結構", analysis.trend, ["direction", "ma20Direction", "waveStage", "confidence"]);
+    html += renderSignalSection("🧩 型態與關鍵訊號", analysis.patterns || analysis.pattern);
+    html += renderAiSection("📏 均線與回檔", analysis.movingAverages, ["ma5", "ma20", "retracement", "granville"]);
+    html += renderAiSection("📊 量價與資金", analysis.volume, ["priceVolume", "volumeLevel", "obv", "interpretation"]);
+    html += renderAiSection("⚡ 動能指標", analysis.momentum, ["kd", "macd", "rsi", "divergence"]);
+    html += renderAiSection("🌡️ 乖離與波動", analysis.volatility, ["bias", "bollinger", "overheat"]);
+    html += renderKeyLevels(analysis.keyLevels);
+    html += renderCrossValidation(analysis.crossValidation);
+    html += renderRiskSection(analysis.risk);
+    html += renderMissingData(analysis.missingData);
+
+    if (analysis.rawNote) {
+      html += `<div class="ai-card"><div class="ai-card-title">📝 補充</div><div class="ai-raw">${escapeHtml(analysis.rawNote)}</div></div>`;
+    }
+
+    html += `</div>`;
+    result.innerHTML = html;
+    result.style.display = "block";
+    result.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function renderAiSection(title, obj, preferredKeys = []) {
+    if (!obj || typeof obj !== "object") return "";
+    const labels = {
+      direction: "趨勢",
+      ma20Direction: "月線方向",
+      waveStage: "波段位階",
+      confidence: "信心",
+      ma5: "5MA",
+      ma20: "20MA",
+      retracement: "回檔／黃金分割",
+      granville: "均線法則",
+      priceVolume: "量價",
+      volumeLevel: "量能",
+      obv: "OBV",
+      interpretation: "判讀",
+      kd: "KD",
+      macd: "MACD",
+      rsi: "RSI",
+      divergence: "背離",
+      bias: "BIAS",
+      bollinger: "布林通道",
+      overheat: "過熱／超跌"
+    };
+
+    const used = new Set();
+    const parts = [];
+    const keys = [...preferredKeys, ...Object.keys(obj)];
+    for (const key of keys) {
+      if (used.has(key) || key === "evidence" || key === "signals") continue;
+      used.add(key);
+      const value = obj[key];
+      if (value === null || value === undefined || value === "" || typeof value === "object") continue;
+      parts.push(`<div class="ai-line"><strong>${escapeHtml(labels[key] || key)}：</strong>${escapeHtml(String(value))}</div>`);
+    }
+
+    if (Array.isArray(obj.evidence) && obj.evidence.length) {
+      parts.push(`<div class="ai-chip-wrap">${obj.evidence.map(x => `<span class="ai-chip">${escapeHtml(String(x))}</span>`).join("")}</div>`);
+    }
+
+    if (!parts.length) return "";
+    return `<div class="ai-card"><div class="ai-card-title">${title}</div>${parts.join("")}</div>`;
+  }
+
+  function renderSignalSection(title, data) {
+    if (!data) return "";
+    const signals = Array.isArray(data) ? data : (Array.isArray(data.signals) ? data.signals : []);
+    if (!signals.length && typeof data === "object") {
+      return renderAiSection(title, data);
+    }
+    if (!signals.length) return "";
+
+    const rows = signals.map(signal => {
+      const status = String(signal.status || "觀察");
+      return `
+        <div class="ai-signal">
+          <div class="ai-signal-dot">${signalIcon(status)}</div>
+          <div>
+            <div class="ai-signal-name">${escapeHtml(signal.name || "技術訊號")}｜${escapeHtml(status)}</div>
+            <div class="ai-signal-reason">${escapeHtml(signal.reason || "")}</div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    return `<div class="ai-card"><div class="ai-card-title">${title}</div>${rows}</div>`;
+  }
+
+  function renderKeyLevels(levels) {
+    if (!levels || typeof levels !== "object") return "";
+    const supports = toArray(levels.support);
+    const resistances = toArray(levels.resistance);
+    const notes = toArray(levels.notes);
+    if (!supports.length && !resistances.length && !notes.length) return "";
+
+    return `
+      <div class="ai-card">
+        <div class="ai-card-title">🎯 關鍵價位</div>
+        ${supports.length ? `<div class="ai-line"><strong>支撐：</strong>${escapeHtml(supports.join("、"))}</div>` : ""}
+        ${resistances.length ? `<div class="ai-line"><strong>壓力：</strong>${escapeHtml(resistances.join("、"))}</div>` : ""}
+        ${notes.length ? `<div class="ai-line"><strong>說明：</strong>${escapeHtml(notes.join("；"))}</div>` : ""}
+      </div>
+    `;
+  }
+
+  function renderCrossValidation(cv) {
+    if (!cv || typeof cv !== "object") return "";
+    const bullish = toArray(cv.bullish);
+    const neutral = toArray(cv.neutral);
+    const bearish = toArray(cv.bearish);
+    const conflicts = toArray(cv.conflicts);
+    if (!bullish.length && !neutral.length && !bearish.length && !conflicts.length) return "";
+
+    return `
+      <div class="ai-card">
+        <div class="ai-card-title">⚖️ 交叉驗證</div>
+        ${bullish.length ? `<div class="ai-line">🟢 <strong>偏多：</strong>${escapeHtml(bullish.join("；"))}</div>` : ""}
+        ${neutral.length ? `<div class="ai-line">🟡 <strong>待確認：</strong>${escapeHtml(neutral.join("；"))}</div>` : ""}
+        ${bearish.length ? `<div class="ai-line">🔴 <strong>風險：</strong>${escapeHtml(bearish.join("；"))}</div>` : ""}
+        ${conflicts.length ? `<div class="ai-line">⚔️ <strong>分歧：</strong>${escapeHtml(conflicts.join("；"))}</div>` : ""}
+      </div>
+    `;
+  }
+
+  function renderRiskSection(risk) {
+    if (!risk || typeof risk !== "object") return "";
+    const warnings = toArray(risk.warnings);
+    return `
+      <div class="ai-card ai-risk-card">
+        <div class="ai-card-title">🛡️ 防守與失效條件</div>
+        ${risk.defense ? `<div class="ai-line"><strong>技術防守：</strong>${escapeHtml(String(risk.defense))}</div>` : ""}
+        ${risk.invalidation ? `<div class="ai-line"><strong>失效條件：</strong>${escapeHtml(String(risk.invalidation))}</div>` : ""}
+        ${risk.nextConfirmation ? `<div class="ai-line"><strong>下一個確認：</strong>${escapeHtml(String(risk.nextConfirmation))}</div>` : ""}
+        ${warnings.length ? `<div class="ai-line"><strong>主要風險：</strong>${escapeHtml(warnings.join("；"))}</div>` : ""}
+      </div>
+    `;
+  }
+
+  function renderMissingData(items) {
+    const list = toArray(items);
+    if (!list.length) return "";
+    return `
+      <div class="ai-card">
+        <div class="ai-card-title">👀 圖中未提供／無法可靠辨識</div>
+        <div class="ai-chip-wrap">${list.map(x => `<span class="ai-chip">${escapeHtml(String(x))}</span>`).join("")}</div>
+      </div>
+    `;
+  }
+
+  function toArray(value) {
+    if (Array.isArray(value)) return value.filter(Boolean).map(String);
+    if (value === null || value === undefined || value === "") return [];
+    return [String(value)];
+  }
+
+  function signalIcon(status) {
+    if (/確認|成立|偏多|符合|轉強|有效/i.test(status)) return "🟢";
+    if (/失效|偏空|危險|不符合|轉弱/i.test(status)) return "🔴";
+    return "🟡";
+  }
+
+  function overallTone(status) {
+    if (/偏多|多頭|轉強/i.test(status)) return "bullish";
+    if (/偏空|空頭|轉弱/i.test(status)) return "bearish";
+    if (/不足|無法/i.test(status)) return "insufficient";
+    return "neutral";
+  }
+
+  function overallIcon(status) {
+    if (/偏多|多頭|轉強/i.test(status)) return "🟢";
+    if (/偏空|空頭|轉弱/i.test(status)) return "🔴";
+    if (/不足|無法/i.test(status)) return "⚪";
+    return "🟡";
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
 
 
 </script>
