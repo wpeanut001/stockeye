@@ -2377,8 +2377,8 @@
     <div class="ai-hero">
       <div class="ai-title">📷 AI 技術圖交叉分析</div>
       <div class="ai-subtitle">
-        上傳券商 K 線截圖，StockEye 會從趨勢結構、型態、均線、量價、動能、乖離與風控交叉判讀。<br>
-        圖上沒有的資料不猜測；型態會區分「形成中」與「已確認」。
+        上傳券商 K 線截圖，StockEye 會先辨識日K／週K／5分K等週期，再套用對應的趨勢、均線、量價與動能規則。<br>
+        圖上沒有的資料不猜測；現價不當成波段高低點；型態會區分「形成中」與「已確認」。
       </div>
     </div>
 
@@ -4416,9 +4416,9 @@
     html += renderAiSection("🔎 AI 讀到的原始資料", analysis.observed, ["ma5", "ma10", "ma20", "kd", "macd", "volume"]);
     html += renderAiSection("📈 趨勢結構", analysis.trend, ["direction", "priceStructure", "maDirection", "waveStage", "confidence"]);
     html += renderSignalSection("🧩 型態與關鍵訊號", analysis.patterns || analysis.pattern);
-    html += renderAiSection("📏 均線與回檔", analysis.movingAverages, ["ma5", "ma10", "ma20", "order", "arrangement", "slope", "retracement", "granville"]);
+    html += renderAiSection("📏 均線與回檔", analysis.movingAverages, ["ma5", "ma10", "ma20", "order", "arrangement", "convergence", "slope", "stateTransition", "retracement", "granville"]);
     html += renderAiSection("📊 量價與資金", analysis.volume, ["priceVolume", "volumeLevel", "obv", "interpretation"]);
-    html += renderAiSection("⚡ 動能指標", analysis.momentum, ["kd", "macd", "rsi", "divergence"]);
+    html += renderAiSection("⚡ 動能指標", analysis.momentum, ["kd", "macd", "macdConsistency", "rsi", "divergence"]);
     html += renderAiSection("🌡️ 乖離與波動", analysis.volatility, ["bias", "bollinger", "overheat"]);
     html += renderKeyLevels(analysis.keyLevels);
     html += renderCrossValidation(analysis.crossValidation);
@@ -4458,12 +4458,15 @@
       slope: "均線斜率",
       retracement: "回檔／黃金分割",
       granville: "均線法則",
+      convergence: "收斂／糾結",
+      stateTransition: "均線狀態轉換",
       priceVolume: "量價",
       volumeLevel: "量能",
       obv: "OBV",
       interpretation: "判讀",
       kd: "KD",
       macd: "MACD",
+      macdConsistency: "MACD一致性檢查",
       rsi: "RSI",
       divergence: "背離",
       bias: "BIAS",
@@ -4516,16 +4519,26 @@
 
   function renderKeyLevels(levels) {
     if (!levels || typeof levels !== "object") return "";
+    const shortSupport = toArray(levels.shortTermSupport);
+    const mediumSupport = toArray(levels.mediumTermSupport);
+    const majorSupport = toArray(levels.majorSupport);
+    const shortResistance = toArray(levels.shortTermResistance);
+    const majorResistance = toArray(levels.majorResistance);
     const supports = toArray(levels.support);
     const resistances = toArray(levels.resistance);
     const notes = toArray(levels.notes);
-    if (!supports.length && !resistances.length && !notes.length) return "";
+    if (!shortSupport.length && !mediumSupport.length && !majorSupport.length && !shortResistance.length && !majorResistance.length && !supports.length && !resistances.length && !notes.length) return "";
 
     return `
       <div class="ai-card">
         <div class="ai-card-title">🎯 關鍵價位</div>
-        ${supports.length ? `<div class="ai-line"><strong>支撐：</strong>${escapeHtml(supports.join("、"))}</div>` : ""}
-        ${resistances.length ? `<div class="ai-line"><strong>壓力：</strong>${escapeHtml(resistances.join("、"))}</div>` : ""}
+        ${shortSupport.length ? `<div class="ai-line"><strong>近期支撐：</strong>${escapeHtml(shortSupport.join("、"))}</div>` : ""}
+        ${mediumSupport.length ? `<div class="ai-line"><strong>中期支撐：</strong>${escapeHtml(mediumSupport.join("、"))}</div>` : ""}
+        ${majorSupport.length ? `<div class="ai-line"><strong>大波段支撐：</strong>${escapeHtml(majorSupport.join("、"))}</div>` : ""}
+        ${shortResistance.length ? `<div class="ai-line"><strong>近期壓力：</strong>${escapeHtml(shortResistance.join("、"))}</div>` : ""}
+        ${majorResistance.length ? `<div class="ai-line"><strong>大波段壓力：</strong>${escapeHtml(majorResistance.join("、"))}</div>` : ""}
+        ${(!shortSupport.length && !mediumSupport.length && supports.length) ? `<div class="ai-line"><strong>支撐：</strong>${escapeHtml(supports.join("、"))}</div>` : ""}
+        ${(!shortResistance.length && !majorResistance.length && resistances.length) ? `<div class="ai-line"><strong>壓力：</strong>${escapeHtml(resistances.join("、"))}</div>` : ""}
         ${notes.length ? `<div class="ai-line"><strong>說明：</strong>${escapeHtml(notes.join("；"))}</div>` : ""}
       </div>
     `;
@@ -4556,8 +4569,10 @@
     return `
       <div class="ai-card ai-risk-card">
         <div class="ai-card-title">🛡️ 防守與失效條件</div>
-        ${risk.defense ? `<div class="ai-line"><strong>技術防守：</strong>${escapeHtml(String(risk.defense))}</div>` : ""}
-        ${risk.invalidation ? `<div class="ai-line"><strong>失效條件：</strong>${escapeHtml(String(risk.invalidation))}</div>` : ""}
+        ${risk.shortTermDefense ? `<div class="ai-line"><strong>短線防守：</strong>${escapeHtml(String(risk.shortTermDefense))}</div>` : ""}
+        ${risk.structuralDefense ? `<div class="ai-line"><strong>結構防守：</strong>${escapeHtml(String(risk.structuralDefense))}</div>` : ""}
+        ${(!risk.shortTermDefense && !risk.structuralDefense && risk.defense) ? `<div class="ai-line"><strong>技術防守：</strong>${escapeHtml(String(risk.defense))}</div>` : ""}
+        ${risk.invalidation ? `<div class="ai-line"><strong>中期失效條件：</strong>${escapeHtml(String(risk.invalidation))}</div>` : ""}
         ${risk.nextConfirmation ? `<div class="ai-line"><strong>下一個確認：</strong>${escapeHtml(String(risk.nextConfirmation))}</div>` : ""}
         ${warnings.length ? `<div class="ai-line"><strong>主要風險：</strong>${escapeHtml(warnings.join("；"))}</div>` : ""}
       </div>
