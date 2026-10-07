@@ -4412,16 +4412,18 @@
       <div class="ai-grid">
     `;
 
-    html += renderAiSection("📈 趨勢結構", analysis.trend, ["direction", "ma20Direction", "waveStage", "confidence"]);
+    html += renderAiSection("🧭 圖表辨識", analysis.chartContext, ["timeframe", "mode", "mainOverlay", "symbol", "currentPrice", "confidence", "note"]);
+    html += renderAiSection("🔎 AI 讀到的原始資料", analysis.observed, ["ma5", "ma10", "ma20", "kd", "macd", "volume"]);
+    html += renderAiSection("📈 趨勢結構", analysis.trend, ["direction", "priceStructure", "maDirection", "waveStage", "confidence"]);
     html += renderSignalSection("🧩 型態與關鍵訊號", analysis.patterns || analysis.pattern);
-    html += renderAiSection("📏 均線與回檔", analysis.movingAverages, ["ma5", "ma20", "retracement", "granville"]);
+    html += renderAiSection("📏 均線與回檔", analysis.movingAverages, ["ma5", "ma10", "ma20", "order", "arrangement", "slope", "retracement", "granville"]);
     html += renderAiSection("📊 量價與資金", analysis.volume, ["priceVolume", "volumeLevel", "obv", "interpretation"]);
     html += renderAiSection("⚡ 動能指標", analysis.momentum, ["kd", "macd", "rsi", "divergence"]);
     html += renderAiSection("🌡️ 乖離與波動", analysis.volatility, ["bias", "bollinger", "overheat"]);
     html += renderKeyLevels(analysis.keyLevels);
     html += renderCrossValidation(analysis.crossValidation);
     html += renderRiskSection(analysis.risk);
-    html += renderMissingData(analysis.missingData);
+    html += renderMissingData(analysis.missingData, analysis.uncertainData);
 
     if (analysis.rawNote) {
       html += `<div class="ai-card"><div class="ai-card-title">📝 補充</div><div class="ai-raw">${escapeHtml(analysis.rawNote)}</div></div>`;
@@ -4436,12 +4438,24 @@
   function renderAiSection(title, obj, preferredKeys = []) {
     if (!obj || typeof obj !== "object") return "";
     const labels = {
+      timeframe: "圖表週期",
+      mode: "分析模式",
+      mainOverlay: "主圖模式",
+      symbol: "股票",
+      currentPrice: "現價",
+      note: "辨識依據",
       direction: "趨勢",
+      priceStructure: "價格結構",
+      maDirection: "均線方向",
       ma20Direction: "月線方向",
       waveStage: "波段位階",
       confidence: "信心",
-      ma5: "5MA",
-      ma20: "20MA",
+      ma5: "5期／5MA",
+      ma10: "10期／10MA",
+      ma20: "20期／20MA",
+      order: "均線順序",
+      arrangement: "均線排列",
+      slope: "均線斜率",
       retracement: "回檔／黃金分割",
       granville: "均線法則",
       priceVolume: "量價",
@@ -4490,7 +4504,7 @@
         <div class="ai-signal">
           <div class="ai-signal-dot">${signalIcon(status)}</div>
           <div>
-            <div class="ai-signal-name">${escapeHtml(signal.name || "技術訊號")}｜${escapeHtml(status)}</div>
+            <div class="ai-signal-name">${escapeHtml(signal.name || "技術訊號")}｜${escapeHtml(status)}${signal.completion ? `｜${escapeHtml(String(signal.completion))}` : ""}</div>
             <div class="ai-signal-reason">${escapeHtml(signal.reason || "")}</div>
           </div>
         </div>
@@ -4550,13 +4564,15 @@
     `;
   }
 
-  function renderMissingData(items) {
-    const list = toArray(items);
-    if (!list.length) return "";
+  function renderMissingData(missingItems, uncertainItems) {
+    const missing = toArray(missingItems);
+    const uncertain = toArray(uncertainItems);
+    if (!missing.length && !uncertain.length) return "";
     return `
       <div class="ai-card">
-        <div class="ai-card-title">👀 圖中未提供／無法可靠辨識</div>
-        <div class="ai-chip-wrap">${list.map(x => `<span class="ai-chip">${escapeHtml(String(x))}</span>`).join("")}</div>
+        <div class="ai-card-title">👀 資料完整度</div>
+        ${missing.length ? `<div class="ai-line"><strong>📭 圖中未顯示：</strong></div><div class="ai-chip-wrap">${missing.map(x => `<span class="ai-chip">${escapeHtml(String(x))}</span>`).join("")}</div>` : ""}
+        ${uncertain.length ? `<div class="ai-line" style="margin-top:10px"><strong>🔍 有看到但無法可靠辨識：</strong></div><div class="ai-chip-wrap">${uncertain.map(x => `<span class="ai-chip">${escapeHtml(String(x))}</span>`).join("")}</div>` : ""}
       </div>
     `;
   }
