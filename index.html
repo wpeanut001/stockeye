@@ -152,6 +152,267 @@
 
 
 
+    .search-wrap {
+
+      position: relative;
+
+    }
+
+
+
+    .search-suggestions {
+
+      display: none;
+
+      position: absolute;
+
+      z-index: 30;
+
+      left: 0;
+
+      right: 0;
+
+      top: calc(100% + 6px);
+
+      background: #ffffff;
+
+      border: 1px solid #d1d5db;
+
+      border-radius: 14px;
+
+      overflow: hidden;
+
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+
+    }
+
+
+
+    .search-suggestion {
+
+      width: 100%;
+
+      min-height: 50px;
+
+      padding: 10px 14px;
+
+      border: 0;
+
+      border-bottom: 1px solid #f1f5f9;
+
+      border-radius: 0;
+
+      margin: 0;
+
+      background: #ffffff;
+
+      color: #111827;
+
+      text-align: left;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 10px;
+
+      font-size: 15px;
+
+      font-weight: 600;
+
+    }
+
+
+
+    .search-suggestion:last-child {
+
+      border-bottom: 0;
+
+    }
+
+
+
+    .search-suggestion:hover {
+
+      background: #f8fafc;
+
+    }
+
+
+
+    .search-suggestion small {
+
+      color: #64748b;
+
+      font-weight: 500;
+
+      white-space: nowrap;
+
+    }
+
+
+
+    .roe-model-card {
+
+      margin-top: 13px;
+
+      padding: 18px;
+
+      border-radius: 17px;
+
+      border: 1px solid #e5e7eb;
+
+      background: #ffffff;
+
+    }
+
+
+
+    .roe-model-card.cheap { border-color: #a7f3d0; background: #ecfdf5; }
+    .roe-model-card.fair { border-color: #bfdbfe; background: #eff6ff; }
+    .roe-model-card.warm { border-color: #fde68a; background: #fffbeb; }
+    .roe-model-card.expensive { border-color: #fed7aa; background: #fff7ed; }
+    .roe-model-card.danger { border-color: #fecaca; background: #fef2f2; }
+    .roe-model-card.unknown { border-color: #e5e7eb; background: #f9fafb; }
+
+
+
+    .roe-model-head {
+
+      display: flex;
+
+      align-items: flex-start;
+
+      justify-content: space-between;
+
+      gap: 12px;
+
+    }
+
+
+
+    .roe-model-title {
+
+      font-size: 15px;
+
+      font-weight: 800;
+
+    }
+
+
+
+    .roe-zone {
+
+      font-size: 22px;
+
+      font-weight: 800;
+
+      margin-top: 4px;
+
+    }
+
+
+
+    .roe-signal {
+
+      flex: 0 0 auto;
+
+      padding: 6px 10px;
+
+      border-radius: 999px;
+
+      background: rgba(255,255,255,0.72);
+
+      font-size: 12px;
+
+      font-weight: 800;
+
+    }
+
+
+
+    .roe-grid {
+
+      display: grid;
+
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+
+      gap: 9px;
+
+      margin-top: 14px;
+
+    }
+
+
+
+    .roe-metric {
+
+      background: rgba(255,255,255,0.68);
+
+      border: 1px solid rgba(148,163,184,0.22);
+
+      border-radius: 12px;
+
+      padding: 10px;
+
+    }
+
+
+
+    .roe-metric-label {
+
+      font-size: 11px;
+
+      color: #64748b;
+
+      font-weight: 700;
+
+    }
+
+
+
+    .roe-metric-value {
+
+      margin-top: 3px;
+
+      font-size: 17px;
+
+      font-weight: 800;
+
+    }
+
+
+
+    .roe-zone-line {
+
+      margin-top: 12px;
+
+      font-size: 12px;
+
+      line-height: 1.7;
+
+      color: #475569;
+
+    }
+
+
+
+    .roe-note {
+
+      margin-top: 10px;
+
+      font-size: 12px;
+
+      line-height: 1.7;
+
+      color: #475569;
+
+    }
+
+
+
     button {
 
       width: 100%;
@@ -1258,27 +1519,47 @@
 
   <label for="stockInput">
 
-    股票／ETF 代號
+    股票／ETF 代號或名稱
 
   </label>
 
 
 
-  <input
+  <div class="search-wrap">
 
-    id="stockInput"
+    <input
 
-    type="text"
+      id="stockInput"
 
-    inputmode="numeric"
+      type="search"
 
-    maxlength="6"
+      inputmode="search"
 
-    placeholder="例如：2330、6488、00918"
+      maxlength="30"
 
-    autocomplete="off"
+      placeholder="例如：2330、台積電、6488、00918"
 
-  >
+      autocomplete="off"
+
+      aria-autocomplete="list"
+
+      aria-controls="searchSuggestions"
+
+    >
+
+
+
+    <div
+
+      id="searchSuggestions"
+
+      class="search-suggestions"
+
+      role="listbox"
+
+    ></div>
+
+  </div>
 
 
 
@@ -1569,6 +1850,43 @@
       </div>
 
 
+
+      <!-- ROE－淨值估值模型 -->
+      <div
+        id="roeNetAssetCard"
+        class="roe-model-card unknown stock-only"
+      >
+        <div class="roe-model-head">
+          <div>
+            <div class="roe-model-title">🧮 ROE－淨值估值模型</div>
+            <div id="roeZone" class="roe-zone">資料讀取中</div>
+          </div>
+          <div id="roeSignal" class="roe-signal">--</div>
+        </div>
+
+        <div class="roe-grid">
+          <div class="roe-metric">
+            <div class="roe-metric-label">調整淨值</div>
+            <div id="roeAdjustedNetValue" class="roe-metric-value">--</div>
+          </div>
+          <div class="roe-metric">
+            <div class="roe-metric-label">調整 ROE</div>
+            <div id="roeAdjustedROE" class="roe-metric-value">--</div>
+          </div>
+          <div class="roe-metric">
+            <div class="roe-metric-label">基準值</div>
+            <div id="roeBaseValue" class="roe-metric-value">--</div>
+          </div>
+          <div class="roe-metric">
+            <div class="roe-metric-label">現價相對基準值</div>
+            <div id="roePriceVsBase" class="roe-metric-value">--</div>
+          </div>
+        </div>
+
+        <div id="roeZoneLine" class="roe-zone-line"></div>
+        <div id="roeExplanation" class="roe-note"></div>
+        <div id="roeQuality" class="roe-note"></div>
+      </div>
 
 
 
@@ -2465,7 +2783,7 @@
 
 
 
-    const code =
+    const query =
 
       input.value.trim();
 
@@ -2487,41 +2805,15 @@
 
       document.getElementById("searchButton");
 
+    if (!query) {
 
-
-
-
-    if (!code) {
-
-      alert("請輸入股票或 ETF 代號 😊");
+      alert("請輸入股票／ETF 代號或名稱 😊");
 
       return;
 
     }
 
-
-
-
-
-    if (!/^[0-9]{4,6}$/.test(code)) {
-
-
-
-      status.className =
-
-        "status error";
-
-
-
-      status.innerText =
-
-        "股票／ETF 代號格式不正確";
-
-
-
-      return;
-
-    }
+    hideSearchSuggestions();
 
 
 
@@ -2571,7 +2863,7 @@
 
           "?code=" +
 
-          encodeURIComponent(code)
+          encodeURIComponent(query)
 
         );
 
@@ -2734,6 +3026,8 @@
       stock.valuation || {};
 
 
+
+    renderRoeNetAsset(stock.roeNetAsset);
 
 
 
@@ -3609,6 +3903,156 @@
 
 
 
+  function renderRoeNetAsset(model) {
+
+    const card = document.getElementById("roeNetAssetCard");
+
+    if (!card) return;
+
+    if (!model || model.applicable === false) {
+      card.className = "roe-model-card unknown stock-only";
+      setText("roeZone", "不適用");
+      setText("roeSignal", "--");
+      setText("roeAdjustedNetValue", "--");
+      setText("roeAdjustedROE", "--");
+      setText("roeBaseValue", "--");
+      setText("roePriceVsBase", "--");
+      setText("roeZoneLine", "");
+      setText("roeExplanation", model?.explanation || "此模型只適用一般公司股票。");
+      setText("roeQuality", "");
+      return;
+    }
+
+    if (!model.available) {
+      card.className = "roe-model-card unknown stock-only";
+      setText("roeZone", model.status || "資料不足");
+      setText("roeSignal", "等待");
+      setText("roeAdjustedNetValue", "--");
+      setText("roeAdjustedROE", "--");
+      setText("roeBaseValue", "--");
+      setText("roePriceVsBase", "--");
+      setText("roeZoneLine", "");
+      setText("roeExplanation", model.explanation || "目前無法可靠計算。");
+      setText("roeQuality", "");
+      return;
+    }
+
+    const zone = model.zone || {};
+    const level = ["cheap", "fair", "warm", "expensive", "danger"].includes(zone.level)
+      ? zone.level
+      : "unknown";
+
+    card.className = "roe-model-card stock-only " + level;
+
+    setText("roeZone", zone.label || "--");
+    setText("roeSignal", zone.signal || "--");
+    setText("roeAdjustedNetValue", formatMoney(model.adjustedNetValue));
+    setText("roeAdjustedROE", isNumber(model.adjustedROE) ? Number(model.adjustedROE).toFixed(2) + "%" : "--");
+    setText("roeBaseValue", formatMoney(model.baseValue));
+    setText(
+      "roePriceVsBase",
+      isNumber(model.priceToBasePercent)
+        ? (Number(model.priceToBasePercent) >= 0 ? "+" : "") + Number(model.priceToBasePercent).toFixed(1) + "%"
+        : "--"
+    );
+
+    const t = model.thresholds || {};
+    const zoneLine = [
+      isNumber(t.deepHead) ? `魚頭下緣 ${formatMoney(t.deepHead)}` : "",
+      isNumber(t.base) ? `基準 ${formatMoney(t.base)}` : "",
+      isNumber(t.bodyHigh) ? `魚身上緣 ${formatMoney(t.bodyHigh)}` : "",
+      isNumber(t.tailHigh) ? `魚尾上緣 ${formatMoney(t.tailHigh)}` : "",
+      isNumber(t.crazy) ? `瘋狂價 ${formatMoney(t.crazy)} 起` : ""
+    ].filter(Boolean).join(" ｜ ");
+
+    setText("roeZoneLine", zoneLine);
+    setText("roeExplanation", model.explanation || zone.action || "");
+
+    const quality = model.quality || {};
+    const qualityText = [
+      quality.netValueMethod ? `淨值：${quality.netValueMethod}` : "",
+      quality.roeMethod ? `ROE：${quality.roeMethod}` : "",
+      quality.shareNote || ""
+    ].filter(Boolean).join("；");
+
+    setText("roeQuality", qualityText ? `ⓘ ${qualityText}` : "");
+  }
+
+
+
+  let searchSuggestTimer = null;
+  let searchSuggestController = null;
+
+  function hideSearchSuggestions() {
+    const box = document.getElementById("searchSuggestions");
+    if (!box) return;
+    box.style.display = "none";
+    box.innerHTML = "";
+  }
+
+  async function updateSearchSuggestions() {
+    const input = document.getElementById("stockInput");
+    const box = document.getElementById("searchSuggestions");
+    if (!input || !box) return;
+
+    const q = input.value.trim();
+    if (!q) {
+      hideSearchSuggestions();
+      return;
+    }
+
+    if (searchSuggestController) searchSuggestController.abort();
+    searchSuggestController = new AbortController();
+
+    try {
+      const response = await fetch(
+        API + "search?q=" + encodeURIComponent(q),
+        { signal: searchSuggestController.signal }
+      );
+      const data = await response.json();
+      const items = Array.isArray(data.results) ? data.results.slice(0, 8) : [];
+
+      if (!items.length) {
+        hideSearchSuggestions();
+        return;
+      }
+
+      box.innerHTML = "";
+
+      for (const item of items) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "search-suggestion";
+        button.setAttribute("role", "option");
+
+        const left = document.createElement("span");
+        left.textContent = `${item.code} ${item.name || ""}`.trim();
+
+        const right = document.createElement("small");
+        const market = item.market === "TPEx" ? "上櫃" : "上市";
+        right.textContent = item.type === "etf" ? `ETF・${market}` : market;
+
+        button.appendChild(left);
+        button.appendChild(right);
+
+        button.addEventListener("click", () => {
+          input.value = `${item.code} ${item.name || ""}`.trim();
+          hideSearchSuggestions();
+          loadStock();
+        });
+
+        box.appendChild(button);
+      }
+
+      box.style.display = "block";
+
+    } catch (error) {
+      if (error.name !== "AbortError") hideSearchSuggestions();
+    }
+  }
+
+
+
   function quickSearch(code) {
 
 
@@ -4219,6 +4663,36 @@
 
   ).addEventListener(
 
+    "input",
+
+    function() {
+
+      clearTimeout(searchSuggestTimer);
+
+      searchSuggestTimer = setTimeout(updateSearchSuggestions, 220);
+
+    }
+
+  );
+
+
+
+  document.addEventListener("click", function(event) {
+
+    const wrap = event.target.closest ? event.target.closest(".search-wrap") : null;
+
+    if (!wrap) hideSearchSuggestions();
+
+  });
+
+
+
+  document.getElementById(
+
+    "stockInput"
+
+  ).addEventListener(
+
     "keydown",
 
     function(event) {
@@ -4233,6 +4707,7 @@
 
 
 
+        hideSearchSuggestions();
         loadStock();
 
 
